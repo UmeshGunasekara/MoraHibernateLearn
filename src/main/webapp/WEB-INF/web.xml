@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* This web.xml created for MoraServletJSPLearn016 Project
+*
+* @Author: SLMORA
+* @DateTime: 8/1/2020 11:51 AM
+* <p>
+* Version      Date            Editor              Note
+* =====================================================================================================================
+* 1.0          8/1/2020       	SLMORA              Initial Code
+* 1.1          8/9/2020       	SLMORA              Update for MoraServletJSPLearn003
+* 1.2          8/9/2020       	SLMORA              Update for MoraServletJSPLearn004
+* 1.3          8/9/2020       	SLMORA              Update for MoraServletJSPLearn005
+* 1.4          9/3/2020       	SLMORA              Update for MoraServletJSPLearn010
+* 1.5          9/5/2020       	SLMORA              Update for MoraServletJSPLearn015
+* 1.6          9/5/2020       	SLMORA              Update for MoraServletJSPLearn016
+*
+-->
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+  http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1">
+
+  <display-name>Archetype Created Web Application</display-name>
+
+  <welcome-file-list>
+    <welcome-file>/views/index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <servlet>
+    <servlet-name>servletLearn03</servlet-name>
+    <servlet-class>com.slmora.learn.servlet.jspservlet.pack02.LearnServlet03</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>servletLearn04</servlet-name>
+    <servlet-class>com.slmora.learn.servlet.jspservlet.pack02.LearnServlet04</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>servletLearn05</servlet-name>
+    <servlet-class>com.slmora.learn.servlet.jspservlet.pack02.LearnServlet05</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>servletLearn10</servlet-name>
+    <servlet-class>com.slmora.learn.servlet.jspservlet.pack02.LearnServlet10</servlet-class>
+    <init-param>
+      <param-name>defaultUser</param-name>
+      <param-value>Init XML MORA</param-value>
+    </init-param>
+  </servlet>
+  <servlet>
+    <servlet-name>initParam</servlet-name>
+    <jsp-file>/views/init_param.jsp</jsp-file>
+    <init-param>
+      <param-name>defaultUser</param-name>
+      <param-value>Init XML MORA</param-value>
+    </init-param>
+  </servlet>
+  <servlet>
+    <servlet-name>preInitParam</servlet-name>
+    <jsp-file>/views/pre_init.jsp</jsp-file>
+    <init-param>
+      <param-name>defaultUser</param-name>
+      <param-value>Init XML Pre MORA</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servletLearn03</servlet-name>
+    <url-pattern>/servletlearn03</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>servletLearn04</servlet-name>
+    <url-pattern>/servletlearn04</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>servletLearn05</servlet-name>
+    <url-pattern>/servletlearn05</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>servletLearn10</servlet-name>
+    <url-pattern>/servletlearn10</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>initParam</servlet-name>
+    <url-pattern>/init_param</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>preInitParam</servlet-name>
+    <url-pattern>/pre_init_param</url-pattern>
+  </servlet-mapping>
+
+</web-app>
+
