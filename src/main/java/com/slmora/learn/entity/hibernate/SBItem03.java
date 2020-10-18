@@ -1,7 +1,7 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/18/2020 3:49 PM
+ * @DateTime: 10/18/2020 5:12 PM
  */
 package com.slmora.learn.entity.hibernate;
 
@@ -9,17 +9,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 /**
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/18/2020 3:49 PM
+ * @DateTime: 10/18/2020 5:12 PM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
@@ -28,33 +27,36 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
-@Entity (name = "SB_ITEM_02")
-public class SBItem02
+@Entity
+@Table (name = "SB_ITEM_03")
+public class SBItem03
 {
     @Id
-    @Column (name = "item_02_id")
-    private UUID item02Id;
+    @Column(name = "item_03_id")
+    private UUID item03Id;
 
-    @Column (name = "item_02_id_name")
-    private String item02IdName;
+    @Column (name = "item_03_id_name")
+    private String item03IdName;
 
-    @Column (name = "item_02_name")
-    private String item02Name;
+    @Column (name = "item_03_name")
+    private String item03Name;
 
-    @Column (name = "item_02_description")
-    private String item02Description;
+    @Column (name = "item_03_description")
+    @Basic
+    private String item03Description;
 
-    @Column (name = "item_02_qty_on_hand")
-    private Integer item02QtyOnHand;
+    @Column (name = "item_03_qty_on_hand")
+    private Integer item03QtyOnHand;
 
-    @Column (name = "item_02_measure_unit")
-    private String item02MeasureUnit;
+    @Column (name = "item_03_measure_unit")
+    private String item03MeasureUnit;
 
-    @Column (name = "item_02_unit_price")
-    private Double item02UnitPrice;
+    @Column (name = "item_03_unit_price")
+    private Double item03UnitPrice;
 
     @Column (name = "raw_last_update_date_time")
-    private Timestamp rawLastUpdateDateTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date rawLastUpdateDateTime;
 
     @Column (name = "raw_last_update_log_id")
     private Integer rawLastUpdateLogId;
@@ -78,11 +80,13 @@ public class SBItem02
     private String extra01;
 
     @Column (name = "extra_02")
+    @Lob
     private String extra02;
 
     @Column (name = "extra_03")
+    @Transient
     private String extra03;
 
-    @Column (name = "item_02_category")
-    private String item02Category;
+    @Column (name = "item_03_category")
+    private String item03Category;
 }

@@ -49,5 +49,5 @@ public class SBItem01
     private String extra01;
     private String extra02;
     private String extra03;
-    private UUID item01CategoryId;
+    private String item01Category;
 }

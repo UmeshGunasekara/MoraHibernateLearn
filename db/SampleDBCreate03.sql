@@ -239,7 +239,7 @@ CREATE TABLE SB_ITEM_01
   extra_01 Text,
   extra_02 Text,
   extra_03 Text,
-  item_01_category_id Int,
+  item_01_category Varchar(250),
  PRIMARY KEY (item_01_id)
 )
 ;
@@ -318,8 +318,35 @@ CREATE TABLE SB_ITEM_02
   extra_01 Text,
   extra_02 Text,
   extra_03 Text,
-  item_02_category_id Int,
+  item_02_category Varchar(250),
  PRIMARY KEY (item_02_id)
+)
+;
+
+------------------------------------------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS SB_ITEM_03;
+CREATE TABLE SB_ITEM_03
+(
+  item_03_id Binary(16) NOT NULL,
+  item_03_id_name Varchar(32),
+  item_03_description Varchar(250),
+  item_03_name Varchar(200) NOT NULL,
+  item_03_qty_on_hand Int NOT NULL DEFAULT 0,
+  item_03_measure_unit Char(5),
+  item_03_unit_price Decimal(15,2) DEFAULT 0,
+  raw_last_update_date_time Datetime NOT NULL,
+  raw_last_update_log_id Int NOT NULL,
+  update_user_account_id Int NOT NULL,
+  raw_show_status Int NOT NULL,
+  raw_update_status Int NOT NULL,
+  raw_delete_status Int NOT NULL,
+  raw_active_status Int NOT NULL,
+  extra_01 Text,
+  extra_02 Text,
+  extra_03 Text,
+  item_03_category Varchar(250),
+ PRIMARY KEY (item_03_id)
 )
 ;
 
