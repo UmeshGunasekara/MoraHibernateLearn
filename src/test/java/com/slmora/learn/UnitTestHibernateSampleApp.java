@@ -7,6 +7,7 @@ package com.slmora.learn;
 
 import com.slmora.learn.common.hibernate.HibernateUtil;
 import com.slmora.learn.entity.hibernate.SBItem01;
+import com.slmora.learn.entity.hibernate.SBItem02;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -95,11 +96,11 @@ public class UnitTestHibernateSampleApp
         SBItem01 sbItem01 = SBItem01.of(
                 uuid,
                 uuid.toString(),
-                "Newdail Frsh Milk 1L",
+                "Anchor Frsh Milk 1L",
                 "Frsh Milk",
-                50,
+                150,
                 "Litter",
-                668.50,
+                568.50,
                 new Timestamp(new java.util.Date().getTime()),
                 1,
                 1,
@@ -118,6 +119,58 @@ public class UnitTestHibernateSampleApp
             session.save(sbItem01);
             transaction.commit();
             System.out.println("Added Item 01 : "+ sbItem01.getItem01Name());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Item 02")
+    public void testHibernateSaveItem02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+        UUID uuid = UUID.randomUUID();
+
+        SBItem02 sbItem02 = SBItem02.of(
+                uuid,
+                uuid.toString(),
+                "Anchor Frsh Milk 1L",
+                "Frsh Milk",
+                150,
+                "Litter",
+                568.50,
+                new Timestamp(new java.util.Date().getTime()),
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                null,
+                null,
+                null,
+                UUID.fromString("e2dcf2f7-f6a8-48ec-a314-bb941aa1bcb1"));
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbItem02);
+            transaction.commit();
+            System.out.println("Added Item 01 : "+ sbItem02.getItem02Name());
         } catch (Throwable throwable) {
             if(transaction !=null){
                 transaction.rollback();
