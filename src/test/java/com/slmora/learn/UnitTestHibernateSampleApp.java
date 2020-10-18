@@ -417,11 +417,9 @@ public class UnitTestHibernateSampleApp
     public void testHibernateSaveItem06(){
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
-        UuidUtilities uuidUtilities = new UuidUtilities();
-        UUID uuid = UUID.randomUUID();
 
         SBItem06 sbItem06A = new SBItem06();
-        sbItem06A.setItem06Name("MORA Frsh Milk 1L");
+        sbItem06A.setItem06Name("Anchor Frsh Milk 1L");
 
         SBItem06 sbItem06B = new SBItem06();
         sbItem06B.setItem06Name("MORA Frsh Milk 2L");
@@ -434,6 +432,123 @@ public class UnitTestHibernateSampleApp
             transaction.commit();
             System.out.println("Added Item 06 A : "+ sbItem06A.getItem06Name());
             System.out.println("Added Item 05 B : "+ sbItem06B.getItem06Name());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Item 07")
+    public void testHibernateSaveItem07(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBItem07 sbItem07A = new SBItem07();
+        sbItem07A.setItem07Name("Anchor Frsh Milk 1L");
+
+        SBItem07 sbItem07B = new SBItem07();
+        sbItem07B.setItem07Name("MORA Frsh Milk 2L");
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbItem07A);
+            session.save(sbItem07B);
+            transaction.commit();
+            System.out.println("Added Item 06 A : "+ sbItem07A.getItem07Name());
+            System.out.println("Added Item 05 B : "+ sbItem07B.getItem07Name());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Item 08")
+    public void testHibernateSaveItem08(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBItem08 sbItem08A = new SBItem08();
+        sbItem08A.setItem08Name("Anchor Frsh Milk 1L");
+
+        SBItem08 sbItem08B = new SBItem08();
+        sbItem08B.setItem08Name("MORA Frsh Milk 2L");
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbItem08A);
+            session.save(sbItem08B);
+            transaction.commit();
+            System.out.println("Added Item 06 A : "+ sbItem08A.getItem08Name());
+            System.out.println("Added Item 05 B : "+ sbItem08B.getItem08Name());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Item 09")
+    public void testHibernateSaveItem09(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBItem09 sbItem09A = new SBItem09();
+        sbItem09A.setItem09Name("Anchor Frsh Milk 1L");
+
+        SBItem09 sbItem09B = new SBItem09();
+        sbItem09B.setItem09Name("MORA Frsh Milk 2L");
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbItem09A);
+            session.save(sbItem09B);
+            transaction.commit();
+            System.out.println("Added Item 06 A : "+ sbItem09A.getItem09Name());
+            System.out.println("Added Item 05 B : "+ sbItem09B.getItem09Name());
         } catch (Throwable throwable) {
             if(transaction !=null){
                 transaction.rollback();

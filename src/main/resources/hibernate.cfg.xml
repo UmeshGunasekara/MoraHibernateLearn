@@ -76,6 +76,9 @@
         <mapping class="com.slmora.learn.entity.hibernate.SBItem04" />
         <mapping class="com.slmora.learn.entity.hibernate.SBItem05" />
         <mapping class="com.slmora.learn.entity.hibernate.SBItem06" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBItem07" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBItem08" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBItem09" />
         <!--https://dzone.com/articles/hibernate-5-xml-configuration-example-->
     </session-factory>
 </hibernate-configuration>
