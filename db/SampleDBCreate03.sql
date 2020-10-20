@@ -350,6 +350,90 @@ CREATE TABLE SB_ITEM_03
 )
 ;
 
+------------------------------------------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS SB_CUSTOMER_01;
+CREATE TABLE SB_CUSTOMER_01
+(
+  customer_01_id Binary(16) NOT NULL,
+  customer_01_email Varchar(200),
+  customer_01_sex Char(10),
+  customer_01_first_name Varchar(100),
+  customer_01_last_name Varchar(100),
+  customer_01_nic Char(50),
+  customer_01_mobile Varchar(20),
+  customer_01_birthday Date,
+  customer_01_address Text,
+  raw_last_update_date_time Datetime NOT NULL,
+  raw_last_update_log_id Int NOT NULL,
+  update_user_account_id Int NOT NULL,
+  raw_show_status Int NOT NULL,
+  raw_update_status Int NOT NULL,
+  raw_delete_status Int NOT NULL,
+  raw_active_status Int NOT NULL,
+  extra_01 Text,
+  extra_02 Text,
+  extra_03 Text,
+ PRIMARY KEY (customer_01_id)
+)
+;
+
+------------------------------------------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS SB_EMPLOYEE_01;
+CREATE TABLE SB_EMPLOYEE_01
+(
+  employee_01_id Binary(16) NOT NULL,
+  employee_01_email Varchar(200),
+  employee_01_sex Char(10),
+  employee_01_first_name Varchar(100),
+  employee_01_last_name Varchar(100),
+  employee_01_nic Char(50),
+  employee_01_mobile Varchar(20),
+  employee_01_birthday Date,
+  employee_01_address Text,
+  raw_last_update_date_time Datetime NOT NULL,
+  raw_last_update_log_id Int NOT NULL,
+  update_user_account_id Int NOT NULL,
+  raw_show_status Int NOT NULL,
+  raw_update_status Int NOT NULL,
+  raw_delete_status Int NOT NULL,
+  raw_active_status Int NOT NULL,
+  extra_01 Text,
+  extra_02 Text,
+  extra_03 Text,
+ PRIMARY KEY (employee_01_id)
+)
+;
+
+DROP TABLE IF EXISTS SB_SUPPLIER_01;
+CREATE TABLE SB_SUPPLIER_01
+(
+  supplier_01_id Binary(16) NOT NULL,
+  supplier_01_email Varchar(200),
+  supplier_01_owner_sex Char(10),
+  supplier_01_owner_name Varchar(100),
+  supplier_01_owner_birthday Date,
+  supplier_01_owner_mobile Varchar(20),
+  supplier_01_owner_address Text,
+  supplier_01_business_name Varchar(100),
+  supplier_01_brn Char(50),
+  supplier_01_business_mobile Varchar(20),
+  supplier_01_business_address Text,
+  raw_last_update_date_time Datetime NOT NULL,
+  raw_last_update_log_id Int NOT NULL,
+  update_user_account_id Int NOT NULL,
+  raw_show_status Int NOT NULL,
+  raw_update_status Int NOT NULL,
+  raw_delete_status Int NOT NULL,
+  raw_active_status Int NOT NULL,
+  extra_01 Text,
+  extra_02 Text,
+  extra_03 Text,
+ PRIMARY KEY (supplier_01_id)
+)
+;
+
 ----------------------------------------------------------------------------------
 -- FUNCTIONS
 ----------------------------------------------------------------------------------

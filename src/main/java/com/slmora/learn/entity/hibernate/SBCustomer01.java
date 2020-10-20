@@ -1,7 +1,7 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/18/2020 10:50 PM
+ * @DateTime: 10/20/2020 11:04 PM
  */
 package com.slmora.learn.entity.hibernate;
 
@@ -12,48 +12,56 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/18/2020 10:50 PM
+ * @DateTime: 10/20/2020 11:04 PM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
- * 1.0          10/18/2020      SLMORA                Initial Code
+ * 1.0          10/20/2020      SLMORA                Initial Code
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_ITEM_07")
-public class SBItem07
+@Table(name = "SB_CUSTOMER_01")
+public class SBCustomer01
 {
     @Id
-@Column(name = "item_07_id", columnDefinition = "BINARY(16)")
-@GeneratedValue(generator = "mora-uuid-generator")
-@GenericGenerator(name = "mora-uuid-generator",
-        strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-private byte[] item07Id;
+    @Column(name = "customer_01_id", columnDefinition = "BINARY(16)")
+    @GeneratedValue(generator = "mora-uuid-generator")
+    @GenericGenerator(name = "mora-uuid-generator",
+            strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
+    private byte[] customer01Id;
 
-    @Column (name = "item_07_id_name")
-    private String item07IdName;
+    @Column (name = "customer_01_email")
+    private String customer01Email;
 
-    @Column (name = "item_07_name")
-    private String item07Name;
+    @Column (name = "customer_01_sex")
+    private String customer01Sex;
 
-    @Column (name = "item_07_description")
-    private String item07Description;
+    @Column (name = "customer_01_first_name")
+    private String customer01FirstName;
 
-    @Column (name = "item_07_qty_on_hand")
-    private Integer item07QtyOnHand;
+    @Column (name = "customer_01_last_name")
+    private String customer01LastName;
 
-    @Column (name = "item_07_measure_unit")
-    private String item07MeasureUnit;
+    @Column (name = "customer_01_nic")
+    private String customer01Nic;
 
-    @Column (name = "item_07_unit_price")
-    private Double item07UnitPrice;
+    @Column (name = "customer_01_mobile")
+    private String customer01Mobile;
+
+    @Column (name = "customer_01_birthday")
+    @Temporal(TemporalType.DATE)
+    private Date customer01Birthday;
+
+    @Column (name = "customer_01_address")
+    private String customer01Address;
 
     @Column (name = "raw_last_update_date_time")
     private Timestamp rawLastUpdateDateTime;
@@ -84,9 +92,4 @@ private byte[] item07Id;
 
     @Column (name = "extra_03")
     private String extra03;
-
-    @Column (name = "item_07_category")
-    private String item07Category;
-
-
 }
