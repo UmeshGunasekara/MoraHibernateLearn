@@ -1315,4 +1315,283 @@ public class UnitTestHibernateSampleApp
 
     }
 
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Supplier 02 and Address 01")
+    public void testHibernateSaveSupplier02AndAddress01(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddress01 sbAddress01 = new SBAddress01();
+        sbAddress01.setAddress01Street("Kusumarama Road");
+        sbAddress01.setAddress01Village("Seenigama");
+        sbAddress01.setAddress01City("Hikkaduwa");
+        sbAddress01.setAddress01Country("Sri Lanka");
+        sbAddress01.setAddress01Zip("292000");
+        sbAddress01.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbAddress01.setRawLastUpdateLogId(1);
+        sbAddress01.setUpdateUserAccountId(1);
+        sbAddress01.setRawActiveStatus(1);
+        sbAddress01.setRawDeleteStatus(1);
+        sbAddress01.setRawShowStatus(1);
+        sbAddress01.setRawUpdateStatus(1);
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBSupplier02 sbSupplier02 = new SBSupplier02();
+        sbSupplier02.setSupplier02Email("umesh@slmora.com");
+        sbSupplier02.setSupplier02OwnerSex("Male");
+        sbSupplier02.setSupplier02OwnerName("Umesh");
+        sbSupplier02.setSupplier02OwnerMobile("0711233000");
+        try {
+            sbSupplier02.setSupplier02OwnerBirthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbSupplier02.setSupplier02OwnerAddress(sbAddress01);
+        sbSupplier02.setSupplier02BusinessName("SL MORA");
+        sbSupplier02.setSupplier02Brn("90152");
+        sbSupplier02.setSupplier02BusinessMobile("0761233000");
+        sbSupplier02.setSupplier02BusinessAddress(addressVal01);
+        sbSupplier02.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbSupplier02.setRawLastUpdateLogId(1);
+        sbSupplier02.setUpdateUserAccountId(1);
+        sbSupplier02.setRawActiveStatus(1);
+        sbSupplier02.setRawDeleteStatus(1);
+        sbSupplier02.setRawShowStatus(1);
+        sbSupplier02.setRawUpdateStatus(1);
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbAddress01);
+            session.save(sbSupplier02);
+            transaction.commit();
+            System.out.println("Added Address 01: "+ sbAddress01.getAddress01Street());
+            System.out.println("Added Supplier 02: "+ sbSupplier02.getSupplier02BusinessName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Supplier 03 and Address 02")
+    public void testHibernateSaveSupplier03AndAddress02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddress02 sbAddress02 = new SBAddress02();
+        sbAddress02.setAddress02Street("Kusumarama Road");
+        sbAddress02.setAddress02Village("Seenigama");
+        sbAddress02.setAddress02City("Hikkaduwa");
+        sbAddress02.setAddress02Country("Sri Lanka");
+        sbAddress02.setAddress02Zip("292000");
+        sbAddress02.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbAddress02.setRawLastUpdateLogId(1);
+        sbAddress02.setUpdateUserAccountId(1);
+        sbAddress02.setRawActiveStatus(1);
+        sbAddress02.setRawDeleteStatus(1);
+        sbAddress02.setRawShowStatus(1);
+        sbAddress02.setRawUpdateStatus(1);
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBSupplier03 sbSupplier03 = new SBSupplier03();
+        sbSupplier03.setSupplier03Email("umesh@slmora.com");
+        sbSupplier03.setSupplier03OwnerSex("Male");
+        sbSupplier03.setSupplier03OwnerName("Umesh");
+        sbSupplier03.setSupplier03OwnerMobile("0711233000");
+        try {
+            sbSupplier03.setSupplier03OwnerBirthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbSupplier03.setSupplier03OwnerAddress(sbAddress02);
+        sbSupplier03.setSupplier03BusinessName("SL MORA");
+        sbSupplier03.setSupplier03Brn("90152");
+        sbSupplier03.setSupplier03BusinessMobile("0761233000");
+        sbSupplier03.setSupplier03BusinessAddress(addressVal01);
+        sbSupplier03.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbSupplier03.setRawLastUpdateLogId(1);
+        sbSupplier03.setUpdateUserAccountId(1);
+        sbSupplier03.setRawActiveStatus(1);
+        sbSupplier03.setRawDeleteStatus(1);
+        sbSupplier03.setRawShowStatus(1);
+        sbSupplier03.setRawUpdateStatus(1);
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbAddress02);
+            session.save(sbSupplier03);
+            transaction.commit();
+            System.out.println("Added Address 01: "+ sbAddress02.getAddress02Street());
+            System.out.println("Added Supplier 02: "+ sbSupplier03.getSupplier03BusinessName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Customer 07 and SB Order 04")
+    public void testHibernateSaveCustomer07AndOrder04(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBCustomerOrder04  order01 = new SBCustomerOrder04();
+        order01.setCustomerOrder04InvoiceNumber("IN0000001");
+        order01.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
+        order01.setCustomerOrder04Total(2024.50);
+        order01.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        order01.setRawLastUpdateLogId(1);
+        order01.setUpdateUserAccountId(1);
+        order01.setRawActiveStatus(1);
+        order01.setRawDeleteStatus(1);
+        order01.setRawShowStatus(1);
+        order01.setRawUpdateStatus(1);
+
+        SBCustomerOrder04  order02 = new SBCustomerOrder04();
+        order02.setCustomerOrder04InvoiceNumber("IN0000002");
+        order02.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
+        order02.setCustomerOrder04Total(1024.50);
+        order02.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        order02.setRawLastUpdateLogId(1);
+        order02.setUpdateUserAccountId(1);
+        order02.setRawActiveStatus(1);
+        order02.setRawDeleteStatus(1);
+        order02.setRawShowStatus(1);
+        order02.setRawUpdateStatus(1);
+
+        SBCustomerOrder04  order03 = new SBCustomerOrder04();
+        order03.setCustomerOrder04InvoiceNumber("IN0000003");
+        order03.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
+        order03.setCustomerOrder04Total(3024.50);
+        order03.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        order03.setRawLastUpdateLogId(1);
+        order03.setUpdateUserAccountId(1);
+        order03.setRawActiveStatus(1);
+        order03.setRawDeleteStatus(1);
+        order03.setRawShowStatus(1);
+        order03.setRawUpdateStatus(1);
+
+        SBCustomerOrder04  order04 = new SBCustomerOrder04();
+        order04.setCustomerOrder04InvoiceNumber("IN0000004");
+        order04.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
+        order04.setCustomerOrder04Total(5024.50);
+        order04.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        order04.setRawLastUpdateLogId(1);
+        order04.setUpdateUserAccountId(1);
+        order04.setRawActiveStatus(1);
+        order04.setRawDeleteStatus(1);
+        order04.setRawShowStatus(1);
+        order04.setRawUpdateStatus(1);
+
+        SBCustomer07 sbCustomer07 = new SBCustomer07();
+
+        sbCustomer07.getCustomer07Orders().add(order01);
+        sbCustomer07.getCustomer07Orders().add(order02);
+        sbCustomer07.getCustomer07Orders().add(order03);
+        sbCustomer07.getCustomer07Orders().add(order04);
+
+        sbCustomer07.setCustomer07Email("umesh@slmora.com");
+        sbCustomer07.setCustomer07Sex("Male");
+        sbCustomer07.setCustomer07FirstName("Umesh");
+        sbCustomer07.setCustomer07LastName("Gunasekara");
+        sbCustomer07.setCustomer07Nic("901521344V");
+        sbCustomer07.setCustomer07Mobile("0711233000");
+        try {
+            sbCustomer07.setCustomer07Birthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbCustomer07.setCustomer07Address(addressVal01);
+        sbCustomer07.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbCustomer07.setRawLastUpdateLogId(1);
+        sbCustomer07.setUpdateUserAccountId(1);
+        sbCustomer07.setRawActiveStatus(1);
+        sbCustomer07.setRawDeleteStatus(1);
+        sbCustomer07.setRawShowStatus(1);
+        sbCustomer07.setRawUpdateStatus(1);
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbCustomer07);
+            session.save(order01);
+            session.save(order02);
+            session.save(order03);
+            session.save(order04);
+            transaction.commit();
+            System.out.println("Added Customer 03: "+ sbCustomer07.getCustomer07FirstName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
 }
