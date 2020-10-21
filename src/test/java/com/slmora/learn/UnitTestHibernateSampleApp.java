@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -761,6 +762,553 @@ public class UnitTestHibernateSampleApp
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Customer 04 and SB Order 01")
+    public void testHibernateSaveCustomer04AndOrder01(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBCustomerOrder  order01 = SBCustomerOrder.of(
+                "IN0000001",
+                new Timestamp(new java.util.Date().getTime()),
+                2024.50
+        );
+
+        SBCustomerOrder  order02 = SBCustomerOrder.of(
+                "IN0000002",
+                new Timestamp(new java.util.Date().getTime()),
+                1024.50
+        );
+
+        SBCustomerOrder  order03 = SBCustomerOrder.of(
+                "IN0000003",
+                new Timestamp(new java.util.Date().getTime()),
+                3024.50
+        );
+
+        SBCustomerOrder  order04 = SBCustomerOrder.of(
+                "IN0000004",
+                new Timestamp(new java.util.Date().getTime()),
+                5024.50
+        );
+
+        SBCustomer04 sbCustomer04 = new SBCustomer04();
+
+        sbCustomer04.getCustomer04Orders().add(order01);
+        sbCustomer04.getCustomer04Orders().add(order02);
+        sbCustomer04.getCustomer04Orders().add(order03);
+        sbCustomer04.getCustomer04Orders().add(order04);
+
+        sbCustomer04.setCustomer04Email("umesh@slmora.com");
+        sbCustomer04.setCustomer04Sex("Male");
+        sbCustomer04.setCustomer04FirstName("Umesh");
+        sbCustomer04.setCustomer04LastName("Gunasekara");
+        sbCustomer04.setCustomer04Nic("901521344V");
+        sbCustomer04.setCustomer04Mobile("0711233000");
+        try {
+            sbCustomer04.setCustomer04Birthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbCustomer04.setCustomer04Address(addressVal01);
+        sbCustomer04.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbCustomer04.setRawLastUpdateLogId(1);
+        sbCustomer04.setUpdateUserAccountId(1);
+        sbCustomer04.setRawActiveStatus(1);
+        sbCustomer04.setRawDeleteStatus(1);
+        sbCustomer04.setRawShowStatus(1);
+        sbCustomer04.setRawUpdateStatus(1);
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbCustomer04);
+            transaction.commit();
+            System.out.println("Added Customer 03: "+ sbCustomer04.getCustomer04FirstName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Customer 05 and SB Order 01")
+    public void testHibernateSaveCustomer05AndOrder01(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBCustomerOrder  order01 = SBCustomerOrder.of(
+                "IN0000001",
+                new Timestamp(new java.util.Date().getTime()),
+                2024.50
+        );
+
+        SBCustomerOrder  order02 = SBCustomerOrder.of(
+                "IN0000002",
+                new Timestamp(new java.util.Date().getTime()),
+                1024.50
+        );
+
+        SBCustomerOrder  order03 = SBCustomerOrder.of(
+                "IN0000003",
+                new Timestamp(new java.util.Date().getTime()),
+                3024.50
+        );
+
+        SBCustomerOrder  order04 = SBCustomerOrder.of(
+                "IN0000004",
+                new Timestamp(new java.util.Date().getTime()),
+                5024.50
+        );
+
+        SBCustomer05 sbCustomer05 = new SBCustomer05();
+
+        sbCustomer05.getCustomer05Orders().add(order01);
+        sbCustomer05.getCustomer05Orders().add(order02);
+        sbCustomer05.getCustomer05Orders().add(order03);
+        sbCustomer05.getCustomer05Orders().add(order04);
+
+        sbCustomer05.setCustomer05Email("umesh@slmora.com");
+        sbCustomer05.setCustomer05Sex("Male");
+        sbCustomer05.setCustomer05FirstName("Umesh");
+        sbCustomer05.setCustomer05LastName("Gunasekara");
+        sbCustomer05.setCustomer05Nic("901521344V");
+        sbCustomer05.setCustomer05Mobile("0711233000");
+        try {
+            sbCustomer05.setCustomer05Birthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbCustomer05.setCustomer05Address(addressVal01);
+        sbCustomer05.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbCustomer05.setRawLastUpdateLogId(1);
+        sbCustomer05.setUpdateUserAccountId(1);
+        sbCustomer05.setRawActiveStatus(1);
+        sbCustomer05.setRawDeleteStatus(1);
+        sbCustomer05.setRawShowStatus(1);
+        sbCustomer05.setRawUpdateStatus(1);
+
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbCustomer05);
+            transaction.commit();
+            System.out.println("Added Customer 03: "+ sbCustomer05.getCustomer05FirstName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Hibernate Lazy Loading in Default")
+    public void testHibernateDefaultLazyLoading(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBCustomerOrder  order01 = SBCustomerOrder.of(
+                "IN0000001",
+                new Timestamp(new java.util.Date().getTime()),
+                2024.50
+        );
+
+        SBCustomerOrder  order02 = SBCustomerOrder.of(
+                "IN0000002",
+                new Timestamp(new java.util.Date().getTime()),
+                1024.50
+        );
+
+        SBCustomerOrder  order03 = SBCustomerOrder.of(
+                "IN0000003",
+                new Timestamp(new java.util.Date().getTime()),
+                3024.50
+        );
+
+        SBCustomerOrder  order04 = SBCustomerOrder.of(
+                "IN0000004",
+                new Timestamp(new java.util.Date().getTime()),
+                5024.50
+        );
+
+        SBCustomer05 sbCustomer05 = new SBCustomer05();
+
+        sbCustomer05.getCustomer05Orders().add(order01);
+        sbCustomer05.getCustomer05Orders().add(order02);
+        sbCustomer05.getCustomer05Orders().add(order03);
+        sbCustomer05.getCustomer05Orders().add(order04);
+
+        sbCustomer05.setCustomer05Email("umesh@slmora.com");
+        sbCustomer05.setCustomer05Sex("Male");
+        sbCustomer05.setCustomer05FirstName("Umesh");
+        sbCustomer05.setCustomer05LastName("Gunasekara");
+        sbCustomer05.setCustomer05Nic("901521344V");
+        sbCustomer05.setCustomer05Mobile("0711233000");
+        try {
+            sbCustomer05.setCustomer05Birthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbCustomer05.setCustomer05Address(addressVal01);
+        sbCustomer05.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbCustomer05.setRawLastUpdateLogId(1);
+        sbCustomer05.setUpdateUserAccountId(1);
+        sbCustomer05.setRawActiveStatus(1);
+        sbCustomer05.setRawDeleteStatus(1);
+        sbCustomer05.setRawShowStatus(1);
+        sbCustomer05.setRawUpdateStatus(1);
+
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbCustomer05);
+            transaction.commit();
+            System.out.println("Added Customer 03: "+ sbCustomer05.getCustomer05FirstName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        //********************************************
+        //The first session has benn closed with end of try catch
+        //*******************************************
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            SBCustomer05 customer = session.get(SBCustomer05.class, sbCustomer05.getCustomer05Id());
+            transaction.commit();
+            System.out.println("Get Customer 05: "+ customer.getCustomer05FirstName());
+            System.out.println("Get Customer 05 Orders ");
+            customer.getCustomer05Orders().forEach(
+                    order ->
+                    {
+                        System.out.println("Order Invoice Number :"+order.getCustomerOrderInvoiceNumber());
+                        System.out.println("\tDate & Time :"+order.getCustomerOrderDateTime());
+                        System.out.println("\tTotal Amount:"+order.getCustomerOrderTotal());
+                    });
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Hibernate Lazy Loading in Default with Session Close")
+    public void testHibernateDefaultLazyLoadingWithSessionClose(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBCustomerOrder  order01 = SBCustomerOrder.of(
+                "IN0000001",
+                new Timestamp(new java.util.Date().getTime()),
+                2024.50
+        );
+
+        SBCustomerOrder  order02 = SBCustomerOrder.of(
+                "IN0000002",
+                new Timestamp(new java.util.Date().getTime()),
+                1024.50
+        );
+
+        SBCustomerOrder  order03 = SBCustomerOrder.of(
+                "IN0000003",
+                new Timestamp(new java.util.Date().getTime()),
+                3024.50
+        );
+
+        SBCustomerOrder  order04 = SBCustomerOrder.of(
+                "IN0000004",
+                new Timestamp(new java.util.Date().getTime()),
+                5024.50
+        );
+
+        SBCustomer05 sbCustomer05 = new SBCustomer05();
+
+        sbCustomer05.getCustomer05Orders().add(order01);
+        sbCustomer05.getCustomer05Orders().add(order02);
+        sbCustomer05.getCustomer05Orders().add(order03);
+        sbCustomer05.getCustomer05Orders().add(order04);
+
+        sbCustomer05.setCustomer05Email("umesh@slmora.com");
+        sbCustomer05.setCustomer05Sex("Male");
+        sbCustomer05.setCustomer05FirstName("Umesh");
+        sbCustomer05.setCustomer05LastName("Gunasekara");
+        sbCustomer05.setCustomer05Nic("901521344V");
+        sbCustomer05.setCustomer05Mobile("0711233000");
+        try {
+            sbCustomer05.setCustomer05Birthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbCustomer05.setCustomer05Address(addressVal01);
+        sbCustomer05.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbCustomer05.setRawLastUpdateLogId(1);
+        sbCustomer05.setUpdateUserAccountId(1);
+        sbCustomer05.setRawActiveStatus(1);
+        sbCustomer05.setRawDeleteStatus(1);
+        sbCustomer05.setRawShowStatus(1);
+        sbCustomer05.setRawUpdateStatus(1);
+
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbCustomer05);
+            transaction.commit();
+            System.out.println("Added Customer 03: "+ sbCustomer05.getCustomer05FirstName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        //********************************************
+        //The first session has benn closed with end of try catch
+        //*******************************************
+
+        SBCustomer05 customer = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            customer = session.get(SBCustomer05.class, sbCustomer05.getCustomer05Id());
+            transaction.commit();
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Get Customer 05: "+ customer.getCustomer05FirstName());
+        System.out.println("Get Customer 05 Orders ");
+        customer.getCustomer05Orders().forEach(
+                order ->
+                {
+                    System.out.println("Order Invoice Number :"+order.getCustomerOrderInvoiceNumber());
+                    System.out.println("\tDate & Time :"+order.getCustomerOrderDateTime());
+                    System.out.println("\tTotal Amount:"+order.getCustomerOrderTotal());
+                });
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Hibernate Eager Loading in Default with Session Close")
+    public void testHibernateEagerLoadingWithSessionClose(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBCustomerOrder  order01 = SBCustomerOrder.of(
+                "IN0000001",
+                new Timestamp(new java.util.Date().getTime()),
+                2024.50
+        );
+
+        SBCustomerOrder  order02 = SBCustomerOrder.of(
+                "IN0000002",
+                new Timestamp(new java.util.Date().getTime()),
+                1024.50
+        );
+
+        SBCustomerOrder  order03 = SBCustomerOrder.of(
+                "IN0000003",
+                new Timestamp(new java.util.Date().getTime()),
+                3024.50
+        );
+
+        SBCustomerOrder  order04 = SBCustomerOrder.of(
+                "IN0000004",
+                new Timestamp(new java.util.Date().getTime()),
+                5024.50
+        );
+
+        SBCustomer06 sbCustomer06 = new SBCustomer06();
+
+        sbCustomer06.getCustomer06Orders().add(order01);
+        sbCustomer06.getCustomer06Orders().add(order02);
+        sbCustomer06.getCustomer06Orders().add(order03);
+        sbCustomer06.getCustomer06Orders().add(order04);
+
+        sbCustomer06.setCustomer06Email("umesh@slmora.com");
+        sbCustomer06.setCustomer06Sex("Male");
+        sbCustomer06.setCustomer06FirstName("Umesh");
+        sbCustomer06.setCustomer06LastName("Gunasekara");
+        sbCustomer06.setCustomer06Nic("901521344V");
+        sbCustomer06.setCustomer06Mobile("0711233000");
+        try {
+            sbCustomer06.setCustomer06Birthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbCustomer06.setCustomer06Address(addressVal01);
+        sbCustomer06.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbCustomer06.setRawLastUpdateLogId(1);
+        sbCustomer06.setUpdateUserAccountId(1);
+        sbCustomer06.setRawActiveStatus(1);
+        sbCustomer06.setRawDeleteStatus(1);
+        sbCustomer06.setRawShowStatus(1);
+        sbCustomer06.setRawUpdateStatus(1);
+
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbCustomer06);
+            transaction.commit();
+            System.out.println("Added Customer 03: "+ sbCustomer06.getCustomer06FirstName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        //********************************************
+        //The first session has benn closed with end of try catch
+        //*******************************************
+
+        SBCustomer06 customer = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            customer = session.get(SBCustomer06.class, sbCustomer06.getCustomer06Id());
+            transaction.commit();
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Get Customer 05: "+ customer.getCustomer06FirstName());
+        System.out.println("Get Customer 05 Orders ");
+        customer.getCustomer06Orders().forEach(
+                order ->
+                {
+                    System.out.println("Order Invoice Number :"+order.getCustomerOrderInvoiceNumber());
+                    System.out.println("\tDate & Time :"+order.getCustomerOrderDateTime());
+                    System.out.println("\tTotal Amount:"+order.getCustomerOrderTotal());
+                });
+
         long endTime = System.nanoTime();
         ELAPSED_TIME = endTime - startTime;
         System.out.println("Programme End");

@@ -434,6 +434,27 @@ CREATE TABLE SB_SUPPLIER_01
 )
 ;
 
+DROP TABLE IF EXISTS SB_CUSTOMER_ORDER_01;
+CREATE TABLE SB_CUSTOMER_ORDER_01
+(
+  customer_order_01_id Binary(16) NOT NULL,
+  customer_order_01_invoice_number Varchar(20),
+  customer_order_01_date_time Datetime NOT NULL,
+  customer_order_01_total Decimal(15,2) DEFAULT 0,
+  raw_last_update_date_time Datetime NOT NULL,
+  raw_last_update_log_id Int NOT NULL,
+  update_user_account_id Int NOT NULL,
+  raw_show_status Int NOT NULL,
+  raw_update_status Int NOT NULL,
+  raw_delete_status Int NOT NULL,
+  raw_active_status Int NOT NULL,
+  extra_01 Text,
+  extra_02 Text,
+  extra_03 Text,
+ PRIMARY KEY (customer_order_01_id)
+)
+;
+
 ----------------------------------------------------------------------------------
 -- FUNCTIONS
 ----------------------------------------------------------------------------------
@@ -534,3 +555,11 @@ BEGIN
 		HEX(SUBSTR(bin, 9, 2)),
 		HEX(SUBSTR(bin, 11)));
 END
+
+---------------------
+-- Special
+---------------------
+
+SHOW VARIABLES LIKE '%timeout%';
+
+SHOW VARIABLES LIKE '%connect%';

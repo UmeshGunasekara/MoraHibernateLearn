@@ -31,11 +31,11 @@ import java.sql.Timestamp;
 public class SBItem07
 {
     @Id
-@Column(name = "item_07_id", columnDefinition = "BINARY(16)")
-@GeneratedValue(generator = "mora-uuid-generator")
-@GenericGenerator(name = "mora-uuid-generator",
-        strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-private byte[] item07Id;
+    @Column(name = "item_07_id", columnDefinition = "BINARY(16)")
+    @GeneratedValue(generator = "mora-uuid-generator")
+    @GenericGenerator(name = "mora-uuid-generator",
+            strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
+    private byte[] item07Id;
 
     @Column (name = "item_07_id_name")
     private String item07IdName;

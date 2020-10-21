@@ -83,6 +83,9 @@
         <mapping class="com.slmora.learn.entity.hibernate.SBCustomer02" />
         <mapping class="com.slmora.learn.entity.hibernate.SBCustomer03" />
         <mapping class="com.slmora.learn.entity.hibernate.SBSupplier01" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomer04" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomer05" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomer06" />
         <!--https://dzone.com/articles/hibernate-5-xml-configuration-example-->
     </session-factory>
 </hibernate-configuration>
