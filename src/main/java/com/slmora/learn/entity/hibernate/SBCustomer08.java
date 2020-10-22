@@ -46,7 +46,7 @@ public class SBCustomer08
             joinColumns = @JoinColumn(name = "customer_08_id"),
             inverseJoinColumns = @JoinColumn(name = "customer_order_04_id")
     )
-    private Collection<SBCustomerOrder04> customer08Orders = new ArrayList();
+    private Collection<SBCustomerOrder05> customer08Orders = new ArrayList();
 
     @Column (name = "customer_08_email")
     private String customer08Email;

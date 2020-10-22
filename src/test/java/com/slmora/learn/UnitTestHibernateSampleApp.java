@@ -1601,8 +1601,8 @@ public class UnitTestHibernateSampleApp
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
-    @DisplayName("Test Insert SB Customer 08 and SB Order 04")
-    public void testHibernateSaveCustomer08AndOrder04(){
+    @DisplayName("Test Insert SB Customer 08 and SB Order 05")
+    public void testHibernateSaveCustomer08AndOrder05(){
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1614,10 +1614,10 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder04  order01 = new SBCustomerOrder04();
-        order01.setCustomerOrder04InvoiceNumber("IN0000001");
-        order01.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
-        order01.setCustomerOrder04Total(2024.50);
+        SBCustomerOrder05  order01 = new SBCustomerOrder05();
+        order01.setCustomerOrder05InvoiceNumber("IN0000001");
+        order01.setCustomerOrder05DateTime(new Timestamp(new java.util.Date().getTime()));
+        order01.setCustomerOrder05Total(2024.50);
         order01.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setRawLastUpdateLogId(1);
         order01.setUpdateUserAccountId(1);
@@ -1626,10 +1626,10 @@ public class UnitTestHibernateSampleApp
         order01.setRawShowStatus(1);
         order01.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order02 = new SBCustomerOrder04();
-        order02.setCustomerOrder04InvoiceNumber("IN0000002");
-        order02.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
-        order02.setCustomerOrder04Total(1024.50);
+        SBCustomerOrder05  order02 = new SBCustomerOrder05();
+        order02.setCustomerOrder05InvoiceNumber("IN0000002");
+        order02.setCustomerOrder05DateTime(new Timestamp(new java.util.Date().getTime()));
+        order02.setCustomerOrder05Total(1024.50);
         order02.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
         order02.setRawLastUpdateLogId(1);
         order02.setUpdateUserAccountId(1);
@@ -1638,10 +1638,10 @@ public class UnitTestHibernateSampleApp
         order02.setRawShowStatus(1);
         order02.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order03 = new SBCustomerOrder04();
-        order03.setCustomerOrder04InvoiceNumber("IN0000003");
-        order03.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
-        order03.setCustomerOrder04Total(3024.50);
+        SBCustomerOrder05  order03 = new SBCustomerOrder05();
+        order03.setCustomerOrder05InvoiceNumber("IN0000003");
+        order03.setCustomerOrder05DateTime(new Timestamp(new java.util.Date().getTime()));
+        order03.setCustomerOrder05Total(3024.50);
         order03.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
         order03.setRawLastUpdateLogId(1);
         order03.setUpdateUserAccountId(1);
@@ -1650,10 +1650,10 @@ public class UnitTestHibernateSampleApp
         order03.setRawShowStatus(1);
         order03.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order04 = new SBCustomerOrder04();
-        order04.setCustomerOrder04InvoiceNumber("IN0000004");
-        order04.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
-        order04.setCustomerOrder04Total(5024.50);
+        SBCustomerOrder05  order04 = new SBCustomerOrder05();
+        order04.setCustomerOrder05InvoiceNumber("IN0000004");
+        order04.setCustomerOrder05DateTime(new Timestamp(new java.util.Date().getTime()));
+        order04.setCustomerOrder05Total(5024.50);
         order04.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
         order04.setRawLastUpdateLogId(1);
         order04.setUpdateUserAccountId(1);
