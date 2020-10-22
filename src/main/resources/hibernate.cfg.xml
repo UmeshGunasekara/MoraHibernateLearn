@@ -93,8 +93,21 @@
         <mapping class="com.slmora.learn.entity.hibernate.SBCustomer07" />
         <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder04" />
         <mapping class="com.slmora.learn.entity.hibernate.SBCustomer08" />
-        <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder05" />
         <mapping class="com.slmora.learn.entity.hibernate.SBCustomer09" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder05" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomer10" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder06" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomer11" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder07" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBItem10" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomer12" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder08" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBItem11" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomer13" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder09" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBItem12" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomer14" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder10" />
         <!--https://dzone.com/articles/hibernate-5-xml-configuration-example-->
     </session-factory>
 </hibernate-configuration>

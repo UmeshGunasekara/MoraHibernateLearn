@@ -1,16 +1,14 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/22/2020 1:41 AM
+ * @DateTime: 10/23/2020 2:16 AM
  */
 package com.slmora.learn.entity.hibernate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CollectionId;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -22,70 +20,73 @@ import java.util.Date;
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/22/2020 1:41 AM
+ * @DateTime: 10/23/2020 2:16 AM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
- * 1.0          10/22/2020      SLMORA                Initial Code
+ * 1.0          10/23/2020      SLMORA                Initial Code
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_CUSTOMER_07")
-public class SBCustomer07
+@Table(name = "SB_CUSTOMER_14")
+public class SBCustomer14
 {
     @Id
-    @Column(name = "customer_07_id", columnDefinition = "BINARY(16)")
+    @Column(name = "customer_14_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "mora-uuid-generator")
     @GenericGenerator(name = "mora-uuid-generator",
             strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-    private byte[] customer07Id;
+    private byte[] customer14Id;
 
-    @OneToMany
-    private Collection<SBCustomerOrder04> customer07Orders = new ArrayList();
+    @OneToMany(
+            mappedBy = "sbCustomer14",
+            cascade = CascadeType.PERSIST
+    )
+    private Collection<SBCustomerOrder10> customer14Orders = new ArrayList();
 
-    @Column (name = "customer_07_email")
-    private String customer07Email;
+    @Column (name = "customer_14_email")
+    private String customer14Email;
 
-    @Column (name = "customer_07_sex")
-    private String customer07Sex;
+    @Column (name = "customer_14_sex")
+    private String customer14Sex;
 
-    @Column (name = "customer_07_first_name")
-    private String customer07FirstName;
+    @Column (name = "customer_14_first_name")
+    private String customer14FirstName;
 
-    @Column (name = "customer_07_last_name")
-    private String customer07LastName;
+    @Column (name = "customer_14_last_name")
+    private String customer14LastName;
 
-    @Column (name = "customer_07_nic")
-    private String customer07Nic;
+    @Column (name = "customer_14_nic")
+    private String customer14Nic;
 
-    @Column (name = "customer_07_mobile")
-    private String customer07Mobile;
+    @Column (name = "customer_14_mobile")
+    private String customer14Mobile;
 
-    @Column (name = "customer_07_birthday")
+    @Column (name = "customer_14_birthday")
     @Temporal(TemporalType.DATE)
-    private Date customer07Birthday;
+    private Date customer14Birthday;
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(
                     name = "addressStreet",
-                    column = @Column(name = "customer_07_address_street")),
+                    column = @Column(name = "customer_14_address_street")),
             @AttributeOverride(
                     name = "addressVillage",
-                    column = @Column(name = "customer_07_address_village")),
+                    column = @Column(name = "customer_14_address_village")),
             @AttributeOverride(
                     name = "addressCity",
-                    column = @Column(name = "customer_07_address_city")),
+                    column = @Column(name = "customer_14_address_city")),
             @AttributeOverride(
                     name = "addressCountry",
-                    column = @Column(name = "customer_07_address_country")),
+                    column = @Column(name = "customer_14_address_country")),
             @AttributeOverride(
                     name = "addressZip",
-                    column = @Column(name = "customer_07_address_zip"))
+                    column = @Column(name = "customer_14_address_zip"))
     })
-    private SBAddressVal01 customer07Address;
+    private SBAddressVal01 customer14Address;
 
     @Column (name = "raw_last_update_date_time")
     private Timestamp rawLastUpdateDateTime;

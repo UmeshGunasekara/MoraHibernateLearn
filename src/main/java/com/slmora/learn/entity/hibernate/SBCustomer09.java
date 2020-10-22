@@ -30,7 +30,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_customer_09")
+@Table(name = "SB_CUSTOMER_09")
 public class SBCustomer09
 {
     @Id
@@ -42,11 +42,11 @@ public class SBCustomer09
 
     @OneToMany
     @JoinTable(
-            name = "SB_customer_09_ORDER_04",
+            name = "SB_CUSTOMER_09_ORDER_05",
             joinColumns = @JoinColumn(name = "customer_09_id"),
-            inverseJoinColumns = @JoinColumn(name = "customer_order_04_id")
+            inverseJoinColumns = @JoinColumn(name = "customer_order_05_id")
     )
-    private Collection<SBCustomerOrder04> customer09Orders = new ArrayList();
+    private Collection<SBCustomerOrder05> customer09Orders = new ArrayList();
 
     @Column (name = "customer_09_email")
     private String customer09Email;

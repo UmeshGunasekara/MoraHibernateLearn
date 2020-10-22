@@ -1,7 +1,7 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/23/2020 2:20 AM
  */
 package com.slmora.learn.entity.hibernate;
 
@@ -12,44 +12,52 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/23/2020 2:20 AM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
- * 1.0          10/22/2020      SLMORA                Initial Code
+ * 1.0          10/23/2020      SLMORA                Initial Code
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_CUSTOMER_ORDER_05")
-public class SBCustomerOrder05
+@Table(name = "SB_ITEM_12")
+public class SBItem12
 {
     @Id
-    @Column(name = "customer_order_05_id", columnDefinition = "BINARY(16)")
+    @Column(name = "item_12_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "mora-uuid-generator")
     @GenericGenerator(name = "mora-uuid-generator",
             strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-    private byte[] customerOrder05Id;
+    private byte[] item12Id;
 
-    @ManyToOne
-    private SBCustomer09 sbCustomer09;
+    @ManyToMany(mappedBy = "customerOrder10Items")
+    private Collection<SBCustomerOrder10> item12Orders = new ArrayList();
 
-    @Column(name = "customer_order_05_invoice_number")
-    private String customerOrder05InvoiceNumber;
+    @Column (name = "item_12_name")
+    private String item12Name;
 
-    @Column (name = "customer_order_05_date_time")
-    private Timestamp customerOrder05DateTime;
+    @Column (name = "item_12_description")
+    private String item12Description;
 
-    @Column (name = "customer_order_05_total")
-    private Double customerOrder05Total;
+    @Column (name = "item_12_qty_on_hand")
+    private Integer item12QtyOnHand;
 
-    @Column (name = "raw_last_update_04_date_time")
+    @Column (name = "item_12_measure_unit")
+    private String item12MeasureUnit;
+
+    @Column (name = "item_12_unit_price")
+    private Double item12UnitPrice;
+
+    @Column (name = "raw_last_update_date_time")
     private Timestamp rawLastUpdateDateTime;
 
     @Column (name = "raw_last_update_log_id")

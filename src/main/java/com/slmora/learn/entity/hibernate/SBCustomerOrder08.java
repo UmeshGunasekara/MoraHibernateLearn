@@ -1,7 +1,7 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/23/2020 12:47 AM
  */
 package com.slmora.learn.entity.hibernate;
 
@@ -12,42 +12,53 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/23/2020 12:47 AM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
- * 1.0          10/22/2020      SLMORA                Initial Code
+ * 1.0          10/23/2020      SLMORA                Initial Code
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_CUSTOMER_ORDER_05")
-public class SBCustomerOrder05
+@Table(name = "SB_CUSTOMER_ORDER_08")
+public class SBCustomerOrder08
 {
     @Id
-    @Column(name = "customer_order_05_id", columnDefinition = "BINARY(16)")
+    @Column(name = "customer_order_08_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "mora-uuid-generator")
     @GenericGenerator(name = "mora-uuid-generator",
             strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-    private byte[] customerOrder05Id;
+    private byte[] customerOrder08Id;
 
     @ManyToOne
-    private SBCustomer09 sbCustomer09;
+    @JoinColumn(name = "customer_12_id")
+    private SBCustomer12 sbCustomer12;
 
-    @Column(name = "customer_order_05_invoice_number")
-    private String customerOrder05InvoiceNumber;
+    @ManyToMany
+    @JoinTable(
+            name = "SB_CUSTOMER_ORDER_08_ITEM_11",
+            joinColumns = @JoinColumn(name = "customer_order_08_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_11_id")
+    )
+    private Collection<SBItem11> customerOrder08Items = new ArrayList();
 
-    @Column (name = "customer_order_05_date_time")
-    private Timestamp customerOrder05DateTime;
+    @Column(name = "customer_order_08_invoice_number")
+    private String customerOrder08InvoiceNumber;
 
-    @Column (name = "customer_order_05_total")
-    private Double customerOrder05Total;
+    @Column (name = "customer_order_08_date_time")
+    private Timestamp customerOrder08DateTime;
+
+    @Column (name = "customer_order_08_total")
+    private Double customerOrder08Total;
 
     @Column (name = "raw_last_update_04_date_time")
     private Timestamp rawLastUpdateDateTime;

@@ -459,6 +459,8 @@ CREATE TABLE SB_CUSTOMER_ORDER_01
 -- FUNCTIONS
 ----------------------------------------------------------------------------------
 
+SET GLOBAL log_bin_trust_function_creators = 1;
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `get_ordered_uuid`(`uuid` binary(36)) RETURNS binary(16)
 BEGIN
 	RETURN UNHEX(CONCAT(SUBSTR(uuid, 15, 4),SUBSTR(uuid, 10, 4),SUBSTR(uuid, 1, 8),SUBSTR(uuid, 20, 4),SUBSTR(uuid, 25)));

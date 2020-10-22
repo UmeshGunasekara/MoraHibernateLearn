@@ -1,7 +1,7 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/22/2020 11:35 PM
  */
 package com.slmora.learn.entity.hibernate;
 
@@ -12,12 +12,15 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
 /**
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/22/2020 11:35 PM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
@@ -27,29 +30,35 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_CUSTOMER_ORDER_05")
-public class SBCustomerOrder05
+@Table(name = "SB_ITEM_10")
+public class SBItem10
 {
     @Id
-    @Column(name = "customer_order_05_id", columnDefinition = "BINARY(16)")
+    @Column(name = "item_10_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "mora-uuid-generator")
     @GenericGenerator(name = "mora-uuid-generator",
             strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-    private byte[] customerOrder05Id;
+    private byte[] item10Id;
 
-    @ManyToOne
-    private SBCustomer09 sbCustomer09;
+    @ManyToMany
+    private Collection<SBCustomerOrder07> item10Orders = new ArrayList();
 
-    @Column(name = "customer_order_05_invoice_number")
-    private String customerOrder05InvoiceNumber;
+    @Column (name = "item_10_name")
+    private String item10Name;
 
-    @Column (name = "customer_order_05_date_time")
-    private Timestamp customerOrder05DateTime;
+    @Column (name = "item_10_description")
+    private String item10Description;
 
-    @Column (name = "customer_order_05_total")
-    private Double customerOrder05Total;
+    @Column (name = "item_10_qty_on_hand")
+    private Integer item10QtyOnHand;
 
-    @Column (name = "raw_last_update_04_date_time")
+    @Column (name = "item_10_measure_unit")
+    private String item10MeasureUnit;
+
+    @Column (name = "item_10_unit_price")
+    private Double item10UnitPrice;
+
+    @Column (name = "raw_last_update_date_time")
     private Timestamp rawLastUpdateDateTime;
 
     @Column (name = "raw_last_update_log_id")

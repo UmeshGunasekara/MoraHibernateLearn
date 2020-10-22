@@ -1,7 +1,7 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/22/2020 10:09 PM
  */
 package com.slmora.learn.entity.hibernate;
 
@@ -17,7 +17,7 @@ import java.sql.Timestamp;
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/22/2020 10:09 PM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
@@ -27,27 +27,28 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_CUSTOMER_ORDER_05")
-public class SBCustomerOrder05
+@Table(name = "SB_CUSTOMER_ORDER_06")
+public class SBCustomerOrder06
 {
     @Id
-    @Column(name = "customer_order_05_id", columnDefinition = "BINARY(16)")
+    @Column(name = "customer_order_06_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "mora-uuid-generator")
     @GenericGenerator(name = "mora-uuid-generator",
             strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-    private byte[] customerOrder05Id;
+    private byte[] customerOrder06Id;
 
     @ManyToOne
-    private SBCustomer09 sbCustomer09;
+    @JoinColumn(name = "customer_10_id")
+    private SBCustomer10 sbCustomer10;
 
-    @Column(name = "customer_order_05_invoice_number")
-    private String customerOrder05InvoiceNumber;
+    @Column(name = "customer_order_06_invoice_number")
+    private String customerOrder06InvoiceNumber;
 
-    @Column (name = "customer_order_05_date_time")
-    private Timestamp customerOrder05DateTime;
+    @Column (name = "customer_order_06_date_time")
+    private Timestamp customerOrder06DateTime;
 
-    @Column (name = "customer_order_05_total")
-    private Double customerOrder05Total;
+    @Column (name = "customer_order_06_total")
+    private Double customerOrder06Total;
 
     @Column (name = "raw_last_update_04_date_time")
     private Timestamp rawLastUpdateDateTime;

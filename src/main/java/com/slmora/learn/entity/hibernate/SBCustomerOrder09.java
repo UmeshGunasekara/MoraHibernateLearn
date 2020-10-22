@@ -1,7 +1,7 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/23/2020 1:22 AM
  */
 package com.slmora.learn.entity.hibernate;
 
@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -17,37 +19,39 @@ import java.sql.Timestamp;
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/22/2020 9:50 PM
+ * @DateTime: 10/23/2020 1:22 AM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
- * 1.0          10/22/2020      SLMORA                Initial Code
+ * 1.0          10/23/2020      SLMORA                Initial Code
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_CUSTOMER_ORDER_05")
-public class SBCustomerOrder05
+@Table(name = "SB_CUSTOMER_ORDER_09")
+public class SBCustomerOrder09
 {
     @Id
-    @Column(name = "customer_order_05_id", columnDefinition = "BINARY(16)")
+    @Column(name = "customer_order_09_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "mora-uuid-generator")
     @GenericGenerator(name = "mora-uuid-generator",
             strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-    private byte[] customerOrder05Id;
+    private byte[] customerOrder09Id;
 
     @ManyToOne
-    private SBCustomer09 sbCustomer09;
+    @JoinColumn(name = "customer_13_id")
+//    @NotFound(action = NotFoundAction.IGNORE) //Uncomment after run Test case testHibernateNotFoundCustomer13AndOrder09Part01
+    private SBCustomer13 sbCustomer13;
 
-    @Column(name = "customer_order_05_invoice_number")
-    private String customerOrder05InvoiceNumber;
+    @Column(name = "customer_order_09_invoice_number")
+    private String customerOrder09InvoiceNumber;
 
-    @Column (name = "customer_order_05_date_time")
-    private Timestamp customerOrder05DateTime;
+    @Column (name = "customer_order_09_date_time")
+    private Timestamp customerOrder09DateTime;
 
-    @Column (name = "customer_order_05_total")
-    private Double customerOrder05Total;
+    @Column (name = "customer_order_09_total")
+    private Double customerOrder09Total;
 
     @Column (name = "raw_last_update_04_date_time")
     private Timestamp rawLastUpdateDateTime;
