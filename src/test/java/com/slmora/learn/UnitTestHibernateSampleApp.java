@@ -1594,4 +1594,123 @@ public class UnitTestHibernateSampleApp
 
     }
 
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Customer 08 and SB Order 04")
+    public void testHibernateSaveCustomer08AndOrder04(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBAddressVal01 addressVal01 = SBAddressVal01.of(
+                "Kusumarama Road",
+                "Seenigama",
+                "Hikkaduwa",
+                "Sri Lanka",
+                "292000"
+        );
+
+        SBCustomerOrder04  order01 = new SBCustomerOrder04();
+        order01.setCustomerOrder04InvoiceNumber("IN0000001");
+        order01.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
+        order01.setCustomerOrder04Total(2024.50);
+        order01.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        order01.setRawLastUpdateLogId(1);
+        order01.setUpdateUserAccountId(1);
+        order01.setRawActiveStatus(1);
+        order01.setRawDeleteStatus(1);
+        order01.setRawShowStatus(1);
+        order01.setRawUpdateStatus(1);
+
+        SBCustomerOrder04  order02 = new SBCustomerOrder04();
+        order02.setCustomerOrder04InvoiceNumber("IN0000002");
+        order02.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
+        order02.setCustomerOrder04Total(1024.50);
+        order02.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        order02.setRawLastUpdateLogId(1);
+        order02.setUpdateUserAccountId(1);
+        order02.setRawActiveStatus(1);
+        order02.setRawDeleteStatus(1);
+        order02.setRawShowStatus(1);
+        order02.setRawUpdateStatus(1);
+
+        SBCustomerOrder04  order03 = new SBCustomerOrder04();
+        order03.setCustomerOrder04InvoiceNumber("IN0000003");
+        order03.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
+        order03.setCustomerOrder04Total(3024.50);
+        order03.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        order03.setRawLastUpdateLogId(1);
+        order03.setUpdateUserAccountId(1);
+        order03.setRawActiveStatus(1);
+        order03.setRawDeleteStatus(1);
+        order03.setRawShowStatus(1);
+        order03.setRawUpdateStatus(1);
+
+        SBCustomerOrder04  order04 = new SBCustomerOrder04();
+        order04.setCustomerOrder04InvoiceNumber("IN0000004");
+        order04.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
+        order04.setCustomerOrder04Total(5024.50);
+        order04.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        order04.setRawLastUpdateLogId(1);
+        order04.setUpdateUserAccountId(1);
+        order04.setRawActiveStatus(1);
+        order04.setRawDeleteStatus(1);
+        order04.setRawShowStatus(1);
+        order04.setRawUpdateStatus(1);
+
+        SBCustomer08 sbCustomer08 = new SBCustomer08();
+
+        sbCustomer08.getCustomer08Orders().add(order01);
+        sbCustomer08.getCustomer08Orders().add(order02);
+        sbCustomer08.getCustomer08Orders().add(order03);
+        sbCustomer08.getCustomer08Orders().add(order04);
+
+        sbCustomer08.setCustomer08Email("umesh@slmora.com");
+        sbCustomer08.setCustomer08Sex("Male");
+        sbCustomer08.setCustomer08FirstName("Umesh");
+        sbCustomer08.setCustomer08LastName("Gunasekara");
+        sbCustomer08.setCustomer08Nic("901521344V");
+        sbCustomer08.setCustomer08Mobile("0711233000");
+        try {
+            sbCustomer08.setCustomer08Birthday(new SimpleDateFormat("dd/MM/yyyy").parse("31/05/1990"));
+        } catch (ParseException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            e.printStackTrace();
+        }
+        sbCustomer08.setCustomer08Address(addressVal01);
+        sbCustomer08.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+        sbCustomer08.setRawLastUpdateLogId(1);
+        sbCustomer08.setUpdateUserAccountId(1);
+        sbCustomer08.setRawActiveStatus(1);
+        sbCustomer08.setRawDeleteStatus(1);
+        sbCustomer08.setRawShowStatus(1);
+        sbCustomer08.setRawUpdateStatus(1);
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(sbCustomer08);
+            session.save(order01);
+            session.save(order02);
+            session.save(order03);
+            session.save(order04);
+            transaction.commit();
+            System.out.println("Added Customer 03: "+ sbCustomer08.getCustomer08FirstName());
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
 }
