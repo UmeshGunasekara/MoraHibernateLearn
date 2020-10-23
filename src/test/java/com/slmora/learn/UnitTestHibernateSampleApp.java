@@ -19,9 +19,7 @@ import org.junit.jupiter.api.*;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -3030,6 +3028,510 @@ public class UnitTestHibernateSampleApp
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test CRUD Create with Address 02")
+    public void testCRUDCreateWithAddress02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress02> address02s = new ArrayList<>();
+
+        for(int i=0; i<20; i++){
+            SBAddress02 sbAddress02 = new SBAddress02();
+            sbAddress02.setAddress02Street("KusumaramaStreet"+i);
+            sbAddress02.setAddress02Village("Seenigama");
+            sbAddress02.setAddress02City("Hikkaduwa");
+            sbAddress02.setAddress02Country("Sri Lanka");
+            sbAddress02.setAddress02Zip("29200"+i);
+            sbAddress02.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+            sbAddress02.setRawLastUpdateLogId(1);
+            sbAddress02.setUpdateUserAccountId(1);
+            sbAddress02.setRawActiveStatus(1);
+            sbAddress02.setRawDeleteStatus(1);
+            sbAddress02.setRawShowStatus(1);
+            sbAddress02.setRawUpdateStatus(1);
+
+            address02s.add(sbAddress02);
+        }
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address02s.forEach(address -> session.save(address));
+            transaction.commit();
+
+            address02s.forEach(address -> System.out.println("Added Address : "+ address.getAddress02Street()));
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        MoraAccessProperties accessProperties = new MoraAccessProperties();
+        UuidUtilities utilities = new UuidUtilities();
+
+        address02s.forEach(address -> {
+            accessProperties.setPropertyFromPath(
+                    "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
+                    "MORA.HIBERNATE.TEST.testCRUDCreateWithAddress02."+address.getAddress02Street(),
+                    utilities.getUUIDFromOrderedUUIDByteArrayWithApacheCommons(address.getAddress02Id()).toString(),
+                    "Test Comment");
+        });
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     *
+     * set hdm2ddl.auto to update
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test CRUD Retrieve with Address 02")
+    public void testCRUDRetrieveWithAddress02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+        SBAddress02 address = null;
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address = session.get(
+                    SBAddress02.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("d0fd6f3d-f870-414b-9f3e-5bb6a63071bf")));
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : "+ address.getAddress02Street());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     *
+     * set hdm2ddl.auto to update
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test CRUD Delete with Address 02")
+    public void testCRUDDeleteWithAddress02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+        SBAddress02 address = null;
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address = session.get(
+                    SBAddress02.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("d0fd6f3d-f870-414b-9f3e-5bb6a63071bf")));
+
+            System.out.println("Address : "+ address.getAddress02Street());
+
+            session.delete(address);
+
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     *
+     * set hdm2ddl.auto to update
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test CRUD Update with Address 02")
+    public void testCRUDUpdateWithAddress02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+        SBAddress02 address = null;
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address = session.get(
+                    SBAddress02.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
+            System.out.println("Address : "+ address.getAddress02Street());
+            address.setAddress02Street("KusumaramaStreet5");
+
+            session.update(address);
+
+            address = session.get(
+                    SBAddress02.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
+            System.out.println("Address : "+ address.getAddress02Street());
+
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     *
+     * set hdm2ddl.auto to update
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Persistent Object with Address 02")
+    public void testPersistentObjectWithAddress02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+
+        SBAddress02 address1 = null;
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address1 = session.get(
+                    SBAddress02.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
+            System.out.println("Address t1-1: "+ address1.getAddress02Street());
+            address1.setAddress02Street("KusumaramaStreet1000");
+
+            SBAddress02 address2 = session.get(
+                    SBAddress02.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
+            System.out.println("Address t2-1: "+ address1.getAddress02Street());
+            System.out.println("Address t2-2: "+ address2.getAddress02Street());
+
+            address2.setAddress02Street("KusumaramaStreet3000");
+            System.out.println("Address t3-1: "+ address1.getAddress02Street());
+            System.out.println("Address t3-2: "+ address2.getAddress02Street());
+
+
+//            session.update(address);
+//
+//            address = session.get(
+//                    SBAddress02.class,
+//                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
+//            System.out.println("Address : "+ address.getAddress02Street());
+
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        address1.setAddress02Street("KusumaramaStreet5000");
+        System.out.println("Address t4-1: "+ address1.getAddress02Street());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     *
+     * set hdm2ddl.auto to update
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Persistent Object in Delete Operation with Address 02")
+    public void testPersistentObjectInDeleteWithAddress02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+
+        SBAddress02 address1 = null;
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address1 = session.get(
+                    SBAddress02.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("be4d4cb2-4ca5-4c1a-97f9-cd87941a9e1f")));
+            System.out.println("Address t1-1: "+ address1.getAddress02Street());
+            address1.setAddress02Street("KusumaramaStreet2000");
+
+            session.delete(address1);
+
+            address1.setAddress02Street("KusumaramaStreet3000");
+
+            session.save(address1);
+
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        address1.setAddress02Street("KusumaramaStreet6000");
+        System.out.println("Address t4-1: "+ address1.getAddress02Street());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     *
+     * set hdm2ddl.auto to update
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Detached Object to Persistent Operation with Address 02")
+    public void testDetachedToPersistentWithAddress02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+
+        SBAddress02 address1 = null;
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address1 = session.get(
+                    SBAddress02.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("c7cda60a-670c-429f-b60d-7fc74c99cf42")));
+            System.out.println("Address t1-1: "+ address1.getAddress02Street());
+
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+//        address1.setAddress02Street("KusumaramaStreet6000");
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.update(address1);
+//            address1.setAddress02Street("KusumaramaStreet8000");
+
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address t2-1: "+ address1.getAddress02Street());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test CRUD Create with Address 03")
+    public void testCRUDCreateWithAddress03(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress03> address03s = new ArrayList<>();
+
+        for(int i=0; i<20; i++){
+            SBAddress03 sbAddress03 = new SBAddress03();
+            sbAddress03.setAddress03Street("KusumaramaStreet"+i);
+            sbAddress03.setAddress03Village("Seenigama");
+            sbAddress03.setAddress03City("Hikkaduwa");
+            sbAddress03.setAddress03Country("Sri Lanka");
+            sbAddress03.setAddress03Zip("29200"+i);
+            sbAddress03.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+            sbAddress03.setRawLastUpdateLogId(1);
+            sbAddress03.setUpdateUserAccountId(1);
+            sbAddress03.setRawActiveStatus(1);
+            sbAddress03.setRawDeleteStatus(1);
+            sbAddress03.setRawShowStatus(1);
+            sbAddress03.setRawUpdateStatus(1);
+
+            address03s.add(sbAddress03);
+        }
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address03s.forEach(address -> session.save(address));
+            transaction.commit();
+
+            address03s.forEach(address -> System.out.println("Added Address : "+ address.getAddress03Street()));
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        MoraAccessProperties accessProperties = new MoraAccessProperties();
+        UuidUtilities utilities = new UuidUtilities();
+
+        address03s.forEach(address -> {
+            accessProperties.setPropertyFromPath(
+                    "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
+                    "MORA.HIBERNATE.TEST.testCRUDCreateWithAddress03."+address.getAddress03Street(),
+                    utilities.getUUIDFromOrderedUUIDByteArrayWithApacheCommons(address.getAddress03Id()).toString(),
+                    "Test Comment");
+        });
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     *
+     * set hdm2ddl.auto to update
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Detached Object to Persistent Operation with Select Before Update with Address 03")
+    public void testDetachedToPersistentWithSelectBeforeUpdateWithAddress03(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+
+        SBAddress03 address1 = null;
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            address1 = session.get(
+                    SBAddress03.class,
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("e9c79954-9a5e-4903-ac5f-8e3268b14544")));
+            System.out.println("Address t1-1: "+ address1.getAddress03Street());
+
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+//        address1.setAddress02Street("KusumaramaStreet6000");
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.update(address1);
+
+            transaction.commit();
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address t2-1: "+ address1.getAddress03Street());
+
         long endTime = System.nanoTime();
         ELAPSED_TIME = endTime - startTime;
         System.out.println("Programme End");

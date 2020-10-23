@@ -61,8 +61,8 @@
         <!-- Set the current session context -->
         <property name="current_session_context_class">thread</property>
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">create-drop</property>
-<!--        <property name="hbm2ddl.auto">update</property>-->
+<!--        <property name="hbm2ddl.auto">create-drop</property>-->
+        <property name="hbm2ddl.auto">update</property>
         <!-- dbcp connection pool configuration -->
         <property name="hibernate.dbcp.initialSize">5</property>
         <property name="hibernate.dbcp.maxTotal">20</property>
@@ -120,6 +120,7 @@
         <mapping class="com.slmora.learn.entity.hibernate.SBPayment04" />
         <mapping class="com.slmora.learn.entity.hibernate.SBCardPayment04" />
         <mapping class="com.slmora.learn.entity.hibernate.SBChequePayment04" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBAddress03" />
         <!--https://dzone.com/articles/hibernate-5-xml-configuration-example-->
     </session-factory>
 </hibernate-configuration>
