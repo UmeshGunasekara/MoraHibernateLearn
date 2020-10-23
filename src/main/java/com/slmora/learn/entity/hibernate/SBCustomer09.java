@@ -8,6 +8,8 @@ package com.slmora.learn.entity.hibernate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -33,6 +35,8 @@ import java.util.Date;
 @Table(name = "SB_CUSTOMER_09")
 public class SBCustomer09
 {
+    final static Logger LOGGER = LogManager.getLogger(SBCustomer09.class);
+
     @Id
     @Column(name = "customer_09_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "mora-uuid-generator")

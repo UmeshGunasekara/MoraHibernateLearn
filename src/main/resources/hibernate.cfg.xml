@@ -108,6 +108,18 @@
         <mapping class="com.slmora.learn.entity.hibernate.SBItem12" />
         <mapping class="com.slmora.learn.entity.hibernate.SBCustomer14" />
         <mapping class="com.slmora.learn.entity.hibernate.SBCustomerOrder10" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBPayment01" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCardPayment01" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBChequePayment01" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBPayment02" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCardPayment02" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBChequePayment02" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBPayment03" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCardPayment03" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBChequePayment03" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBPayment04" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBCardPayment04" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBChequePayment04" />
         <!--https://dzone.com/articles/hibernate-5-xml-configuration-example-->
     </session-factory>
 </hibernate-configuration>

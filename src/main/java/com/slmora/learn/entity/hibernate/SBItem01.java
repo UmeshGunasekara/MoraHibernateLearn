@@ -8,6 +8,8 @@ package com.slmora.learn.entity.hibernate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -31,6 +33,8 @@ import java.util.UUID;
 @Entity
 public class SBItem01
 {
+    final static Logger LOGGER = LogManager.getLogger(SBItem01.class);
+
     @Id
     private UUID item01Id;
     private String item01IdName;

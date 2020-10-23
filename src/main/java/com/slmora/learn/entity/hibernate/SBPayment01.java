@@ -1,27 +1,26 @@
 /*
  * Created by IntelliJ IDEA.
  * @Author: SLMORA
- * @DateTime: 10/23/2020 2:20 AM
+ * @DateTime: 10/23/2020 5:46 PM
  */
 package com.slmora.learn.entity.hibernate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * This Class created for
  *
  * @Author: SLMORA
- * @DateTime: 10/23/2020 2:20 AM
+ * @DateTime: 10/23/2020 5:46 PM
  * <p>
  * Version      Date            Editor              Note
  * ----------------------------------------------------------------------------------------------------------------
@@ -31,35 +30,32 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Entity
-@Table(name = "SB_ITEM_12")
-public class SBItem12
+@Table(name = "SB_PAYMENT_01")
+public class SBPayment01 implements Cloneable
 {
-    final static Logger LOGGER = LogManager.getLogger(SBItem12.class);
+    final static Logger LOGGER = LogManager.getLogger(SBPayment01.class);
 
     @Id
-    @Column(name = "item_12_id", columnDefinition = "BINARY(16)")
+    @Column(name = "payment_01_id", columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "mora-uuid-generator")
     @GenericGenerator(name = "mora-uuid-generator",
             strategy = "com.slmora.learn.common.hibernate.MoraUUIDGenerator")
-    private byte[] item12Id;
+    private byte[] payment01Id;
 
-    @ManyToMany(mappedBy = "customerOrder10Items")
-    private Collection<SBCustomerOrder10> item12Orders = new ArrayList();
+    @Column (name = "payment_01_number")
+    private String payment01Number;
 
-    @Column (name = "item_12_name")
-    private String item12Name;
+    @Column (name = "payment_01_amount")
+    private Double payment01Amount;
 
-    @Column (name = "item_12_description")
-    private String item12Description;
+    @Column (name = "payment_01_date_time")
+    private Timestamp payment01DateTime;
 
-    @Column (name = "item_12_qty_on_hand")
-    private Integer item12QtyOnHand;
+    @Column (name = "payment_01_description")
+    private String payment01Description;
 
-    @Column (name = "item_12_measure_unit")
-    private String item12MeasureUnit;
-
-    @Column (name = "item_12_unit_price")
-    private Double item12UnitPrice;
+    @Column (name = "payment_01_method")
+    private String payment01Method;
 
     @Column (name = "raw_last_update_date_time")
     private Timestamp rawLastUpdateDateTime;
@@ -90,4 +86,30 @@ public class SBItem12
 
     @Column (name = "extra_03")
     private String extra03;
+
+    @Override
+    public Object clone() {
+        try {
+            return (SBPayment01) super.clone();
+        } catch (CloneNotSupportedException e) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+            return SBPayment01.of(
+                    this.payment01Id,
+                    this.payment01Number,
+                    this.payment01Amount,
+                    this.payment01DateTime,
+                    this.payment01Description,
+                    this.payment01Method,
+                    this.rawLastUpdateDateTime,
+                    this.rawLastUpdateLogId,
+                    this.updateUserAccountId,
+                    this.rawShowStatus,
+                    this.rawUpdateStatus,
+                    this.rawDeleteStatus,
+                    this.rawActiveStatus,
+                    this.extra01,
+                    this.extra02,
+                    this.extra03);
+        }
+    }
 }

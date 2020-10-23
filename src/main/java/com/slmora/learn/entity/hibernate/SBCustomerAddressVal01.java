@@ -8,6 +8,8 @@ package com.slmora.learn.entity.hibernate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -28,6 +30,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class SBCustomerAddressVal01
 {
+    final static Logger LOGGER = LogManager.getLogger(SBCustomerAddressVal01.class);
+
     @Column(name = "customer_02_address_street")
     private String customer02AddressStreet;
 

@@ -8,6 +8,8 @@ package com.slmora.learn.entity.hibernate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -31,6 +33,8 @@ import java.util.UUID;
 @Table(name = "SB_ITEM_08")
 public class SBItem08
 {
+    final static Logger LOGGER = LogManager.getLogger(SBItem08.class);
+
     //Random number based UUID (IETF RFC 4122 version 4)
     @Id
     @GeneratedValue(generator = "UUID")

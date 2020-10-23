@@ -8,6 +8,8 @@ package com.slmora.learn.entity.hibernate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -29,6 +31,8 @@ import java.sql.Timestamp;
 @Table(name = "SB_ITEM_06")
 public class SBItem06
 {
+    final static Logger LOGGER = LogManager.getLogger(SBItem06.class);
+
     @Id
     @Column(name = "item_06_id")
     @GeneratedValue

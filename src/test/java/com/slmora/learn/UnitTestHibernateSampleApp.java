@@ -2632,4 +2632,408 @@ public class UnitTestHibernateSampleApp
 
     }
 
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Payment 01 and SB Card Payment 01 and SB Cheque Payment 01 without Clone")
+    public void testHibernateSavePayment01CardPayment01ChequePayment01WithoutClone(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBPayment01 payment01 = new SBCardPayment01();
+        payment01.setPayment01Number("PY000001");
+        payment01.setPayment01Method("Cash");
+        payment01.setPayment01Amount(350.00);
+        payment01.setPayment01DateTime(new Timestamp(new Date().getTime()));
+        payment01.setPayment01Description("Cash payment");
+        payment01.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        payment01.setRawLastUpdateLogId(1);
+        payment01.setUpdateUserAccountId(1);
+        payment01.setRawActiveStatus(1);
+        payment01.setRawDeleteStatus(1);
+        payment01.setRawShowStatus(1);
+        payment01.setRawUpdateStatus(1);
+
+        SBCardPayment01 cardPayment01 = new SBCardPayment01();
+        cardPayment01.setPayment01Number("PY000002");
+        cardPayment01.setPayment01Method("Card");
+        cardPayment01.setPayment01Amount(240.00);
+        cardPayment01.setPayment01DateTime(new Timestamp(new Date().getTime()));
+        cardPayment01.setPayment01Description("Card payment");
+        cardPayment01.setPayment01CardNumber("9765-1237-8239-9381");
+        cardPayment01.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        cardPayment01.setRawLastUpdateLogId(1);
+        cardPayment01.setUpdateUserAccountId(1);
+        cardPayment01.setRawActiveStatus(1);
+        cardPayment01.setRawDeleteStatus(1);
+        cardPayment01.setRawShowStatus(1);
+        cardPayment01.setRawUpdateStatus(1);
+
+        SBChequePayment01 chequePayment01 = new SBChequePayment01();
+        chequePayment01.setPayment01Number("PY000003");
+        chequePayment01.setPayment01Method("Cheque");
+        chequePayment01.setPayment01Amount(10825.00);
+        chequePayment01.setPayment01DateTime(new Timestamp(new Date().getTime()));
+        chequePayment01.setPayment01Description("Cheque payment");
+        chequePayment01.setPayment01chequeNumber("976-234567-234-234567-12");
+        chequePayment01.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        chequePayment01.setRawLastUpdateLogId(1);
+        chequePayment01.setUpdateUserAccountId(1);
+        chequePayment01.setRawActiveStatus(1);
+        chequePayment01.setRawDeleteStatus(1);
+        chequePayment01.setRawShowStatus(1);
+        chequePayment01.setRawUpdateStatus(1);
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(payment01);
+            session.save(cardPayment01);
+            session.save(cardPayment01);
+            session.save(chequePayment01);
+            transaction.commit();
+            System.out.println("Added Payment: "+ payment01.getPayment01Number());
+            System.out.println("Added Card Payment: "+ cardPayment01.getPayment01Number());
+            System.out.println("Added Cheque Payment: "+ chequePayment01.getPayment01Number());
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Payment 01 and SB Card Payment 01 and SB Cheque Payment 01 Cloned for Card Payment")
+    public void testHibernateSavePayment01CardPayment01ChequePayment01(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBPayment01 payment01 = new SBCardPayment01();
+        payment01.setPayment01Number("PY000001");
+        payment01.setPayment01Method("Cash");
+        payment01.setPayment01Amount(350.00);
+        payment01.setPayment01DateTime(new Timestamp(new Date().getTime()));
+        payment01.setPayment01Description("Cash payment");
+        payment01.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        payment01.setRawLastUpdateLogId(1);
+        payment01.setUpdateUserAccountId(1);
+        payment01.setRawActiveStatus(1);
+        payment01.setRawDeleteStatus(1);
+        payment01.setRawShowStatus(1);
+        payment01.setRawUpdateStatus(1);
+
+        SBPayment01 payment02 = (SBPayment01) (payment01.clone());
+
+        SBCardPayment01 cardPayment01 = (SBCardPayment01) payment02;
+        cardPayment01.setPayment01Number("PY000002");
+        cardPayment01.setPayment01Method("Card");
+        cardPayment01.setPayment01Amount(240.00);
+//        cardPayment01.setPayment01DateTime(new Timestamp(new Date().getTime()));
+        cardPayment01.setPayment01Description("Card payment");
+        cardPayment01.setPayment01CardNumber("9765-1237-8239-9381");
+//        cardPayment01.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+//        cardPayment01.setRawLastUpdateLogId(1);
+//        cardPayment01.setUpdateUserAccountId(1);
+//        cardPayment01.setRawActiveStatus(1);
+//        cardPayment01.setRawDeleteStatus(1);
+//        cardPayment01.setRawShowStatus(1);
+//        cardPayment01.setRawUpdateStatus(1);
+
+        SBChequePayment01 chequePayment01 = new SBChequePayment01();
+        chequePayment01.setPayment01Number("PY000003");
+        chequePayment01.setPayment01Method("Cheque");
+        chequePayment01.setPayment01Amount(10825.00);
+        chequePayment01.setPayment01DateTime(new Timestamp(new Date().getTime()));
+        chequePayment01.setPayment01Description("Cheque payment");
+        chequePayment01.setPayment01chequeNumber("976-234567-234-234567-12");
+        chequePayment01.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        chequePayment01.setRawLastUpdateLogId(1);
+        chequePayment01.setUpdateUserAccountId(1);
+        chequePayment01.setRawActiveStatus(1);
+        chequePayment01.setRawDeleteStatus(1);
+        chequePayment01.setRawShowStatus(1);
+        chequePayment01.setRawUpdateStatus(1);
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(payment01);
+            session.save(cardPayment01);
+            session.save(cardPayment01);
+            session.save(chequePayment01);
+            transaction.commit();
+            System.out.println("Added Payment: "+ payment01.getPayment01Number());
+            System.out.println("Added Card Payment: "+ cardPayment01.getPayment01Number());
+            System.out.println("Added Cheque Payment: "+ chequePayment01.getPayment01Number());
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Payment 02 and SB Card Payment 02 and SB Cheque Payment 02")
+    public void testHibernateSavePayment02CardPayment02ChequePayment02(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBPayment02 payment = new SBPayment02();
+        payment.setPayment02Number("PY000001");
+        payment.setPayment02Method("Cash");
+        payment.setPayment02Amount(350.00);
+        payment.setPayment02DateTime(new Timestamp(new Date().getTime()));
+        payment.setPayment02Description("Cash payment");
+        payment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        payment.setRawLastUpdateLogId(1);
+        payment.setUpdateUserAccountId(1);
+        payment.setRawActiveStatus(1);
+        payment.setRawDeleteStatus(1);
+        payment.setRawShowStatus(1);
+        payment.setRawUpdateStatus(1);
+
+        SBCardPayment02 cardPayment = new SBCardPayment02();
+        cardPayment.setPayment02Number("PY000002");
+        cardPayment.setPayment02Method("Card");
+        cardPayment.setPayment02Amount(240.00);
+        cardPayment.setPayment02DateTime(new Timestamp(new Date().getTime()));
+        cardPayment.setPayment02Description("Card payment");
+        cardPayment.setPayment02CardNumber("9765-1237-8239-9381");
+        cardPayment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        cardPayment.setRawLastUpdateLogId(1);
+        cardPayment.setUpdateUserAccountId(1);
+        cardPayment.setRawActiveStatus(1);
+        cardPayment.setRawDeleteStatus(1);
+        cardPayment.setRawShowStatus(1);
+        cardPayment.setRawUpdateStatus(1);
+
+        SBChequePayment02 chequePayment = new SBChequePayment02();
+        chequePayment.setPayment02Number("PY000003");
+        chequePayment.setPayment02Method("Cheque");
+        chequePayment.setPayment02Amount(10825.00);
+        chequePayment.setPayment02DateTime(new Timestamp(new Date().getTime()));
+        chequePayment.setPayment02Description("Cheque payment");
+        chequePayment.setPayment02chequeNumber("976-234567-234-234567-12");
+        chequePayment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        chequePayment.setRawLastUpdateLogId(1);
+        chequePayment.setUpdateUserAccountId(1);
+        chequePayment.setRawActiveStatus(1);
+        chequePayment.setRawDeleteStatus(1);
+        chequePayment.setRawShowStatus(1);
+        chequePayment.setRawUpdateStatus(1);
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(payment);
+            session.save(cardPayment);
+            session.save(chequePayment);
+            transaction.commit();
+            System.out.println("Added Payment: "+ payment.getPayment02Number());
+            System.out.println("Added Card Payment: "+ cardPayment.getPayment02Number());
+            System.out.println("Added Cheque Payment: "+ chequePayment.getPayment02Number());
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Payment 03 and SB Card Payment 03 and SB Cheque Payment 03")
+    public void testHibernateSavePayment03CardPayment03ChequePayment03(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBPayment03 payment = new SBPayment03();
+        payment.setPayment03Number("PY000001");
+        payment.setPayment03Method("Cash");
+        payment.setPayment03Amount(350.00);
+        payment.setPayment03DateTime(new Timestamp(new Date().getTime()));
+        payment.setPayment03Description("Cash payment");
+        payment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        payment.setRawLastUpdateLogId(1);
+        payment.setUpdateUserAccountId(1);
+        payment.setRawActiveStatus(1);
+        payment.setRawDeleteStatus(1);
+        payment.setRawShowStatus(1);
+        payment.setRawUpdateStatus(1);
+
+        SBCardPayment03 cardPayment = new SBCardPayment03();
+        cardPayment.setPayment03Number("PY000002");
+        cardPayment.setPayment03Method("Card");
+        cardPayment.setPayment03Amount(240.00);
+        cardPayment.setPayment03DateTime(new Timestamp(new Date().getTime()));
+        cardPayment.setPayment03Description("Card payment");
+        cardPayment.setPayment03CardNumber("9765-1237-8239-9381");
+        cardPayment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        cardPayment.setRawLastUpdateLogId(1);
+        cardPayment.setUpdateUserAccountId(1);
+        cardPayment.setRawActiveStatus(1);
+        cardPayment.setRawDeleteStatus(1);
+        cardPayment.setRawShowStatus(1);
+        cardPayment.setRawUpdateStatus(1);
+
+        SBChequePayment03 chequePayment = new SBChequePayment03();
+        chequePayment.setPayment03Number("PY000003");
+        chequePayment.setPayment03Method("Cheque");
+        chequePayment.setPayment03Amount(10825.00);
+        chequePayment.setPayment03DateTime(new Timestamp(new Date().getTime()));
+        chequePayment.setPayment03Description("Cheque payment");
+        chequePayment.setPayment03chequeNumber("976-234567-234-234567-12");
+        chequePayment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        chequePayment.setRawLastUpdateLogId(1);
+        chequePayment.setUpdateUserAccountId(1);
+        chequePayment.setRawActiveStatus(1);
+        chequePayment.setRawDeleteStatus(1);
+        chequePayment.setRawShowStatus(1);
+        chequePayment.setRawUpdateStatus(1);
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(payment);
+            session.save(cardPayment);
+            session.save(chequePayment);
+            transaction.commit();
+            System.out.println("Added Payment: "+ payment.getPayment03Number());
+            System.out.println("Added Card Payment: "+ cardPayment.getPayment03Number());
+            System.out.println("Added Cheque Payment: "+ chequePayment.getPayment03Number());
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Insert SB Payment 04 and SB Card Payment 04 and SB Cheque Payment 04")
+    public void testHibernateSavePayment04CardPayment04ChequePayment04(){
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        SBPayment04 payment = new SBPayment04();
+        payment.setPayment04Number("PY000001");
+        payment.setPayment04Method("Cash");
+        payment.setPayment04Amount(350.00);
+        payment.setPayment04DateTime(new Timestamp(new Date().getTime()));
+        payment.setPayment04Description("Cash payment");
+        payment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        payment.setRawLastUpdateLogId(1);
+        payment.setUpdateUserAccountId(1);
+        payment.setRawActiveStatus(1);
+        payment.setRawDeleteStatus(1);
+        payment.setRawShowStatus(1);
+        payment.setRawUpdateStatus(1);
+
+        SBCardPayment04 cardPayment = new SBCardPayment04();
+        cardPayment.setPayment04Number("PY000002");
+        cardPayment.setPayment04Method("Card");
+        cardPayment.setPayment04Amount(240.00);
+        cardPayment.setPayment04DateTime(new Timestamp(new Date().getTime()));
+        cardPayment.setPayment04Description("Card payment");
+        cardPayment.setPayment04CardNumber("9765-1237-8239-9381");
+        cardPayment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        cardPayment.setRawLastUpdateLogId(1);
+        cardPayment.setUpdateUserAccountId(1);
+        cardPayment.setRawActiveStatus(1);
+        cardPayment.setRawDeleteStatus(1);
+        cardPayment.setRawShowStatus(1);
+        cardPayment.setRawUpdateStatus(1);
+
+        SBChequePayment04 chequePayment = new SBChequePayment04();
+        chequePayment.setPayment04Number("PY000003");
+        chequePayment.setPayment04Method("Cheque");
+        chequePayment.setPayment04Amount(10825.00);
+        chequePayment.setPayment04DateTime(new Timestamp(new Date().getTime()));
+        chequePayment.setPayment04Description("Cheque payment");
+        chequePayment.setPayment04chequeNumber("976-234567-234-234567-12");
+        chequePayment.setRawLastUpdateDateTime(new Timestamp(new Date().getTime()));
+        chequePayment.setRawLastUpdateLogId(1);
+        chequePayment.setUpdateUserAccountId(1);
+        chequePayment.setRawActiveStatus(1);
+        chequePayment.setRawDeleteStatus(1);
+        chequePayment.setRawShowStatus(1);
+        chequePayment.setRawUpdateStatus(1);
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();){
+            transaction=session.beginTransaction();
+            session.save(payment);
+            session.save(cardPayment);
+            session.save(chequePayment);
+            transaction.commit();
+            System.out.println("Added Payment: "+ payment.getPayment04Number());
+            System.out.println("Added Card Payment: "+ cardPayment.getPayment04Number());
+            System.out.println("Added Cheque Payment: "+ chequePayment.getPayment04Number());
+
+        } catch (Throwable throwable) {
+            if(transaction !=null){
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
 }
