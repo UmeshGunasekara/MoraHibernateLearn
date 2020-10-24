@@ -55,6 +55,9 @@ public class HibernateAnoUtil
     private static String HIBERNATE_DBCP_MAX_IDLE;
     private static String HIBERNATE_DBCP_MIN_IDLE;
     private static String HIBERNATE_DBCP_MAX_WITH_MILLIS;
+    private static String HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
+    private static String HIBERNATE_CACHE_USE_QUERY_CACHE;
+    private static String HIBERNATE_CACHE_REGION_FACTORY_CLASS;
 
     private static StandardServiceRegistry REGISTRY;
     private static SessionFactory SESSION_FACTORY;
@@ -93,6 +96,9 @@ public class HibernateAnoUtil
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS,HIBERNATE_CURRENT_SESSION_CONTEXT_CLASS);
                 settings.put(Environment.HBM2DDL_AUTO,HIBERNATE_HBM2DDL_AUTO);
                 settings.put(Environment.POOL_SIZE,HIBERNATE_POOL_SIZE);
+                settings.put(Environment.USE_SECOND_LEVEL_CACHE,HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE);
+                settings.put(Environment.USE_QUERY_CACHE,HIBERNATE_CACHE_USE_QUERY_CACHE);
+                settings.put(Environment.CACHE_REGION_FACTORY,HIBERNATE_CACHE_REGION_FACTORY_CLASS);
 
                 configuration.setProperties(settings);
                 configuration.addAnnotatedClass(SBAddress02.class);
@@ -218,6 +224,15 @@ public class HibernateAnoUtil
             }
             if(HIBERNATE_DBCP_MAX_WITH_MILLIS == null || HIBERNATE_DBCP_MAX_WITH_MILLIS.isBlank()){
                 HIBERNATE_DBCP_MAX_WITH_MILLIS = hibernateProperties.getProperty("MORA.DATASOURCE.HIBERNATE.DBCP.MAX_WITH_MILLIS");
+            }
+            if(HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE == null || HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE.isBlank()){
+                HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = hibernateProperties.getProperty("MORA.DATASOURCE.HIBERNATE.CACHE.USE_SECOND_LEVEL_CACHE");
+            }
+            if(HIBERNATE_CACHE_USE_QUERY_CACHE == null || HIBERNATE_CACHE_USE_QUERY_CACHE.isBlank()){
+                HIBERNATE_CACHE_USE_QUERY_CACHE = hibernateProperties.getProperty("MORA.DATASOURCE.HIBERNATE.CACHE.USE_QUERY_CACHE");
+            }
+            if(HIBERNATE_CACHE_REGION_FACTORY_CLASS == null || HIBERNATE_CACHE_REGION_FACTORY_CLASS.isBlank()){
+                HIBERNATE_CACHE_REGION_FACTORY_CLASS = hibernateProperties.getProperty("MORA.DATASOURCE.HIBERNATE.CACHE.REGION.FACTORY_CLASS");
             }
         }catch (Exception e){
             LOGGER.error(ExceptionUtils.getFullStackTrace(e));

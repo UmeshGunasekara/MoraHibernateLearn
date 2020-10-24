@@ -12,22 +12,31 @@ import com.slmora.learn.entity.hibernate.*;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Example;
 import org.hibernate.query.Query;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestReporter;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -4529,6 +4538,331 @@ public class UnitTestHibernateSampleApp
         }
 
         System.out.println("Address 1 : " + address1.getAddress04Street());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test CRUD Create with Address 05")
+    public void testCRUDCreateWithAddress05()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress05> address05s = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            SBAddress05 sbAddress05 = new SBAddress05();
+            sbAddress05.setAddress05Street("KusumaramaStreet" + i);
+            sbAddress05.setAddress05Village("Seenigama");
+            sbAddress05.setAddress05City("Hikkaduwa");
+            sbAddress05.setAddress05Country("Sri Lanka");
+            sbAddress05.setAddress05Zip("29200" + i);
+            sbAddress05.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+            sbAddress05.setRawLastUpdateLogId(1);
+            sbAddress05.setUpdateUserAccountId(1);
+            sbAddress05.setRawActiveStatus(1);
+            sbAddress05.setRawDeleteStatus(1);
+            sbAddress05.setRawShowStatus(1);
+            sbAddress05.setRawUpdateStatus(1);
+
+            address05s.add(sbAddress05);
+        }
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
+            address05s.forEach(address -> session.save(address));
+            transaction.commit();
+
+            address05s.forEach(address -> System.out.println("Added Address : " + address.getAddress05Street()));
+
+        } catch (Throwable throwable) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        MoraAccessProperties accessProperties = new MoraAccessProperties();
+        UuidUtilities utilities = new UuidUtilities();
+
+        address05s.forEach(address -> {
+            accessProperties.setPropertyFromPath(
+                    "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
+                    "MORA.HIBERNATE.TEST.testCRUDCreateWithAddress05." + address.getAddress05Street(),
+                    utilities.getUUIDFromOrderedUUIDByteArrayWithApacheCommons(address.getAddress05Id()).toString(),
+                    "Test Comment");
+        });
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to Enable second level cache do the configuration in hibernate config and entity
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Second Level Cache Address 05")
+    public void testSecondLevelCacheWithAddress05()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+        SBAddress05 address1 = null;
+
+        SBAddress05 address2 = null;
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try{
+                System.out.println("Session Start");
+                transaction = session.beginTransaction();
+                address1 = session.get(
+                        SBAddress05.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "b0863f28-fd62-4408-a6b2-27033bdd569b")));
+
+                address2 = session.get(
+                        SBAddress05.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "b0863f28-fd62-4408-a6b2-27033bdd569b")));
+                transaction.commit();
+                System.out.println("Session Closed");
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address 1 : " + address1.getAddress05Street());
+        System.out.println("Address 2 : " + address2.getAddress05Street());
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try{
+                System.out.println("Session Start");
+                transaction = session.beginTransaction();
+                address1 = session.get(
+                        SBAddress05.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "b0863f28-fd62-4408-a6b2-27033bdd569b")));
+                transaction.commit();
+                System.out.println("Session Closed");
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address 1 : " + address1.getAddress05Street());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to Enable second level cache do the configuration in hibernate config and entity
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Second Level Query Cache Without configuration With Address 05")
+    public void testSecondLevelQueryCacheWithoutConfigurationWithAddress05()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress05> address2List = null;
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try{
+                System.out.println("Session Start");
+
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<SBAddress05> criteriaQuery = criteriaBuilder.createQuery(SBAddress05.class);
+                Root<SBAddress05> root = criteriaQuery.from(SBAddress05.class);
+
+                criteriaQuery.select(root);
+
+                Query query = session.createQuery(criteriaQuery);
+
+                address2List = query.list();
+
+                System.out.println("Address 1 : " + address2List.size());
+
+                transaction.commit();
+                System.out.println("Session Closed");
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try{
+                System.out.println("Session Start");
+
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<SBAddress05> criteriaQuery = criteriaBuilder.createQuery(SBAddress05.class);
+                Root<SBAddress05> root = criteriaQuery.from(SBAddress05.class);
+
+                criteriaQuery.select(root);
+
+                Query query = session.createQuery(criteriaQuery);
+
+                address2List = query.list();
+
+                System.out.println("Address 2 : " + address2List.size());
+
+                transaction.commit();
+                System.out.println("Session Closed");
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to Enable second level cache do the configuration in hibernate config and entity
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Second Level Query Cache With configuration With Address 05")
+    public void testSecondLevelQueryCacheWithConfigurationWithAddress05()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress05> address2List = null;
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try{
+                System.out.println("Session Start");
+
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<SBAddress05> criteriaQuery = criteriaBuilder.createQuery(SBAddress05.class);
+                Root<SBAddress05> root = criteriaQuery.from(SBAddress05.class);
+
+                criteriaQuery.select(root);
+
+                Query query = session.createQuery(criteriaQuery);
+                query.setCacheable(true);
+
+                address2List = query.list();
+
+                System.out.println("Address 1 : " + address2List.size());
+
+//                transaction.commit(); // second level cash enabled for CacheConcurrencyStrategy.READ_WRITE
+                System.out.println("Session Closed");
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try{
+                System.out.println("Session Start");
+
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<SBAddress05> criteriaQuery = criteriaBuilder.createQuery(SBAddress05.class);
+                Root<SBAddress05> root = criteriaQuery.from(SBAddress05.class);
+
+                criteriaQuery.select(root);
+
+                Query query = session.createQuery(criteriaQuery);
+                query.setCacheable(true);
+
+                address2List = query.list();
+
+                System.out.println("Address 2 : " + address2List.size());
+
+//                transaction.commit(); // second level cash enabled for CacheConcurrencyStrategy.READ_WRITE
+                System.out.println("Session Closed");
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
 
         long endTime = System.nanoTime();
         ELAPSED_TIME = endTime - startTime;

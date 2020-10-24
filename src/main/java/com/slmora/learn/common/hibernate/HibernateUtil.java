@@ -5,7 +5,6 @@
  */
 package com.slmora.learn.common.hibernate;
 
-import com.slmora.learn.common.db.connection.type2.DBConnection2;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

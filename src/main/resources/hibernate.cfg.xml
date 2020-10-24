@@ -15,6 +15,7 @@
  * =====================================================================================================================
  * 1.0          10/18/2020       	SLMORA              Initial Code
  * 1.1          10/18/2020       	SLMORA              Update for MoraHibernateLearn004 hbm2ddl.auto - update
+ * 1.2          10/25/2020       	SLMORA              Update for Second level Cache
  *
 -->
 <!DOCTYPE hibernate-configuration PUBLIC
@@ -56,6 +57,12 @@
         <property name="connection.pool_size">1</property>
         <!-- Select our SQL dialect -->
         <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+        <!-- Enable the second-level cache -->
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+
         <!-- Echo the SQL to stdout -->
         <property name="show_sql">true</property>
         <!-- Set the current session context -->
@@ -122,6 +129,7 @@
         <mapping class="com.slmora.learn.entity.hibernate.SBChequePayment04" />
         <mapping class="com.slmora.learn.entity.hibernate.SBAddress03" />
         <mapping class="com.slmora.learn.entity.hibernate.SBAddress04" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBAddress05" />
         <!--https://dzone.com/articles/hibernate-5-xml-configuration-example-->
     </session-factory>
 </hibernate-configuration>

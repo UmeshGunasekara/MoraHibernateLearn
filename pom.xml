@@ -14,6 +14,7 @@
  * 1.4			10/18/2020			SLMORA              Added hibernate 5.4.22.Final
  * 1.5			10/18/2020			SLMORA              Update lombok-1.18.16, json-20200518, jupiter-5.7.0, mysql-8.0.21
  * 1.6			10/18/2020			SLMORA              Update for MoraHibernateLearn004
+ * 1.7			10/25/2020			SLMORA              Update for Hibernate Second Level Cache added hibernate-ehcache
  *
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
@@ -237,6 +238,14 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-ehcache -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
 
 
     </dependencies>
