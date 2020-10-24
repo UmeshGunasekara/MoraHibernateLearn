@@ -12,14 +12,23 @@ import com.slmora.learn.entity.hibernate.*;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
+import org.hibernate.query.Query;
 import org.junit.jupiter.api.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,7 +52,7 @@ public class UnitTestHibernateSampleApp
 
     /**
      * Runs this method before initialize this test class
-     * */
+     */
     @BeforeAll
     public static void beforeAllInit()
     {
@@ -52,12 +61,13 @@ public class UnitTestHibernateSampleApp
 
     /**
      * Runs this method before each test execution
+     *
      * @param testInfo, testReporter to inject reporting information
-     * */
+     */
     @BeforeEach
     public void beforeEachInit(TestInfo testInfo, TestReporter testReporter)
     {
-        this.testInfo =  testInfo;
+        this.testInfo = testInfo;
         this.testReporter = testReporter;
         testReporter.publishEntry("Running " + testInfo.getDisplayName() + "with tags " + testInfo.getTags() + "\n");
 
@@ -65,20 +75,20 @@ public class UnitTestHibernateSampleApp
 
     /**
      * Runs this method after each test execution
-     * */
+     */
     @AfterEach
     private void afterEachEnd()
     {
-        System.out.println("Test Completed "+testInfo.getDisplayName());
+        System.out.println("Test Completed " + testInfo.getDisplayName());
         System.out.println("After Each Clean Test........");
         System.out.println("Elapsed TIme : " + ELAPSED_TIME + " ns");
-        LOGGER.info("Elapsed TIme for "+testInfo.getDisplayName()+" : " +ELAPSED_TIME);
+        LOGGER.info("Elapsed TIme for " + testInfo.getDisplayName() + " : " + ELAPSED_TIME);
     }
 
     /**
      * This method runs After all Test Cases execution
      * This must be static because of this will execute after instance destroyed
-     * */
+     */
     @AfterAll
     public static void AfterAllInit()
     {
@@ -88,12 +98,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Basic Thread")
-    public void testHibernateSaveItem01UsingHibernateUtil(){
+    public void testHibernateSaveItem01UsingHibernateUtil()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
         UUID uuid = UUID.randomUUID();
@@ -118,16 +129,21 @@ public class UnitTestHibernateSampleApp
                 null,
                 "Milk");
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            session.save(sbItem01);
-            transaction.commit();
-            System.out.println("Added Item 01 : "+ sbItem01.getItem01Name());
-        } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                session.save(sbItem01);
+                transaction.commit();
+                System.out.println("Added Item 01 : " + sbItem01.getItem01Name());
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
             }
+        } catch (Throwable throwable) {
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
@@ -140,12 +156,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Item 02")
-    public void testHibernateSaveItem02(){
+    public void testHibernateSaveItem02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
         UUID uuid = UUID.randomUUID();
@@ -170,16 +187,21 @@ public class UnitTestHibernateSampleApp
                 null,
                 "Milk");
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            session.save(sbItem02);
-            transaction.commit();
-            System.out.println("Added Item 01 : "+ sbItem02.getItem02Name());
-        } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                session.save(sbItem02);
+                transaction.commit();
+                System.out.println("Added Item 01 : " + sbItem02.getItem02Name());
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
             }
+        } catch (Throwable throwable) {
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
@@ -192,12 +214,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Item 03")
-    public void testHibernateSaveItem03(){
+    public void testHibernateSaveItem03()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
         UUID uuid = UUID.randomUUID();
@@ -222,16 +245,22 @@ public class UnitTestHibernateSampleApp
                 null,
                 "Milk");
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            session.save(sbItem03);
-            transaction.commit();
-            System.out.println("Added Item 01 : "+ sbItem03.getItem03Name());
-        } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                session.save(sbItem03);
+                transaction.commit();
+                System.out.println("Added Item 01 : " + sbItem03.getItem03Name());
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
             }
+        } catch (Throwable throwable) {
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
@@ -244,12 +273,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Item 04")
-    public void testHibernateSaveItem04(){
+    public void testHibernateSaveItem04()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
         UUID uuid = UUID.randomUUID();
@@ -274,16 +304,22 @@ public class UnitTestHibernateSampleApp
                 null,
                 "Milk");
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            session.save(sbItem04);
-            transaction.commit();
-            System.out.println("Added Item 04 : "+ sbItem04.getItem04Name());
-        } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                session.save(sbItem04);
+                transaction.commit();
+                System.out.println("Added Item 04 : " + sbItem04.getItem04Name());
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
             }
+        } catch (Throwable throwable) {
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
@@ -296,26 +332,33 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Get SB Item 04")
-    public void testHibernateGetItem04(){
+    public void testHibernateGetItem04()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
         SBItem04 sbItem04 = null;
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            sbItem04 = session.get(SBItem04.class,UUID.fromString("95f2e1b9-50ee-4063-a503-838d92011cc0"));
-            transaction.commit();
-            System.out.println("Get Item 04 : "+ sbItem04.getItem04Name());
-        } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                sbItem04 = session.get(SBItem04.class, UUID.fromString("95f2e1b9-50ee-4063-a503-838d92011cc0"));
+                transaction.commit();
+                System.out.println("Get Item 04 : " + sbItem04.getItem04Name());
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
             }
+        } catch (Throwable throwable) {
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
@@ -328,12 +371,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Item 05")
-    public void testHibernateSaveItem05(){
+    public void testHibernateSaveItem05()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
         UuidUtilities uuidUtilities = new UuidUtilities();
@@ -359,16 +403,21 @@ public class UnitTestHibernateSampleApp
                 null,
                 "Milk");
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            session.save(sbItem05);
-            transaction.commit();
-            System.out.println("Added Item 05 : "+ sbItem05.getItem05Name());
-        } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                session.save(sbItem05);
+                transaction.commit();
+                System.out.println("Added Item 05 : " + sbItem05.getItem05Name());
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
             }
+        } catch (Throwable throwable) {
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
@@ -381,27 +430,35 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Get SB Item 05")
-    public void testHibernateGetItem05(){
+    public void testHibernateGetItem05()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
         UuidUtilities uuidUtilities = new UuidUtilities();
         SBItem05 sbItem05 = null;
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            sbItem05 = session.get(SBItem05.class, uuidUtilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("eeb877e5-91f8-481e-87c2-8eccc276a8ba")));
-            transaction.commit();
-            System.out.println("Get Item 05 : "+ sbItem05.getItem05Name());
-        } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try{
+                transaction = session.beginTransaction();
+                sbItem05 = session.get(SBItem05.class,
+                        uuidUtilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "eeb877e5-91f8-481e-87c2-8eccc276a8ba")));
+                transaction.commit();
+                System.out.println("Get Item 05 : " + sbItem05.getItem05Name());
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
             }
+        } catch (Throwable throwable) {
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
@@ -414,12 +471,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Item 06")
-    public void testHibernateSaveItem06(){
+    public void testHibernateSaveItem06()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -430,15 +488,15 @@ public class UnitTestHibernateSampleApp
         sbItem06B.setItem06Name("MORA Frsh Milk 2L");
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbItem06A);
             session.save(sbItem06B);
             transaction.commit();
-            System.out.println("Added Item 06 A : "+ sbItem06A.getItem06Name());
-            System.out.println("Added Item 05 B : "+ sbItem06B.getItem06Name());
+            System.out.println("Added Item 06 A : " + sbItem06A.getItem06Name());
+            System.out.println("Added Item 05 B : " + sbItem06B.getItem06Name());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -453,12 +511,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Item 07")
-    public void testHibernateSaveItem07(){
+    public void testHibernateSaveItem07()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -469,15 +528,15 @@ public class UnitTestHibernateSampleApp
         sbItem07B.setItem07Name("MORA Frsh Milk 2L");
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbItem07A);
             session.save(sbItem07B);
             transaction.commit();
-            System.out.println("Added Item 06 A : "+ sbItem07A.getItem07Name());
-            System.out.println("Added Item 05 B : "+ sbItem07B.getItem07Name());
+            System.out.println("Added Item 06 A : " + sbItem07A.getItem07Name());
+            System.out.println("Added Item 05 B : " + sbItem07B.getItem07Name());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -492,12 +551,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Item 08")
-    public void testHibernateSaveItem08(){
+    public void testHibernateSaveItem08()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -508,15 +568,15 @@ public class UnitTestHibernateSampleApp
         sbItem08B.setItem08Name("MORA Frsh Milk 2L");
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbItem08A);
             session.save(sbItem08B);
             transaction.commit();
-            System.out.println("Added Item 06 A : "+ sbItem08A.getItem08Name());
-            System.out.println("Added Item 05 B : "+ sbItem08B.getItem08Name());
+            System.out.println("Added Item 06 A : " + sbItem08A.getItem08Name());
+            System.out.println("Added Item 05 B : " + sbItem08B.getItem08Name());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -531,12 +591,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Item 09")
-    public void testHibernateSaveItem09(){
+    public void testHibernateSaveItem09()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -547,15 +608,15 @@ public class UnitTestHibernateSampleApp
         sbItem09B.setItem09Name("MORA Frsh Milk 2L");
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbItem09A);
             session.save(sbItem09B);
             transaction.commit();
-            System.out.println("Added Item 06 A : "+ sbItem09A.getItem09Name());
-            System.out.println("Added Item 05 B : "+ sbItem09B.getItem09Name());
+            System.out.println("Added Item 06 A : " + sbItem09A.getItem09Name());
+            System.out.println("Added Item 05 B : " + sbItem09B.getItem09Name());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -570,12 +631,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 01")
-    public void testHibernateSaveCustomer01(){
+    public void testHibernateSaveCustomer01()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -602,13 +664,13 @@ public class UnitTestHibernateSampleApp
         sbCustomer01.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer01);
             transaction.commit();
-            System.out.println("Added Customer: "+ sbCustomer01.getCustomer01FirstName());
+            System.out.println("Added Customer: " + sbCustomer01.getCustomer01FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -623,12 +685,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 02")
-    public void testHibernateSaveCustomer02(){
+    public void testHibernateSaveCustomer02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -663,13 +726,13 @@ public class UnitTestHibernateSampleApp
         sbCustomer02.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer02);
             transaction.commit();
-            System.out.println("Added Customer: "+ sbCustomer02.getCustomer02FirstName());
+            System.out.println("Added Customer: " + sbCustomer02.getCustomer02FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -684,12 +747,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 03 and SB Supplier 01")
-    public void testHibernateSaveCustomer03AndSupplier01(){
+    public void testHibernateSaveCustomer03AndSupplier01()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -749,15 +813,15 @@ public class UnitTestHibernateSampleApp
 
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer03);
             session.save(sbSupplier01);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer03.getCustomer03FirstName());
-            System.out.println("Added Supplier 01: "+ sbSupplier01.getSupplier01BusinessName());
+            System.out.println("Added Customer 03: " + sbCustomer03.getCustomer03FirstName());
+            System.out.println("Added Supplier 01: " + sbSupplier01.getSupplier01BusinessName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -772,12 +836,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 04 and SB Order 01")
-    public void testHibernateSaveCustomer04AndOrder01(){
+    public void testHibernateSaveCustomer04AndOrder01()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -789,25 +854,25 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder  order01 = SBCustomerOrder.of(
+        SBCustomerOrder order01 = SBCustomerOrder.of(
                 "IN0000001",
                 new Timestamp(new java.util.Date().getTime()),
                 2024.50
         );
 
-        SBCustomerOrder  order02 = SBCustomerOrder.of(
+        SBCustomerOrder order02 = SBCustomerOrder.of(
                 "IN0000002",
                 new Timestamp(new java.util.Date().getTime()),
                 1024.50
         );
 
-        SBCustomerOrder  order03 = SBCustomerOrder.of(
+        SBCustomerOrder order03 = SBCustomerOrder.of(
                 "IN0000003",
                 new Timestamp(new java.util.Date().getTime()),
                 3024.50
         );
 
-        SBCustomerOrder  order04 = SBCustomerOrder.of(
+        SBCustomerOrder order04 = SBCustomerOrder.of(
                 "IN0000004",
                 new Timestamp(new java.util.Date().getTime()),
                 5024.50
@@ -842,13 +907,13 @@ public class UnitTestHibernateSampleApp
         sbCustomer04.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer04);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer04.getCustomer04FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer04.getCustomer04FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -863,12 +928,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 05 and SB Order 01")
-    public void testHibernateSaveCustomer05AndOrder01(){
+    public void testHibernateSaveCustomer05AndOrder01()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -880,25 +946,25 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder  order01 = SBCustomerOrder.of(
+        SBCustomerOrder order01 = SBCustomerOrder.of(
                 "IN0000001",
                 new Timestamp(new java.util.Date().getTime()),
                 2024.50
         );
 
-        SBCustomerOrder  order02 = SBCustomerOrder.of(
+        SBCustomerOrder order02 = SBCustomerOrder.of(
                 "IN0000002",
                 new Timestamp(new java.util.Date().getTime()),
                 1024.50
         );
 
-        SBCustomerOrder  order03 = SBCustomerOrder.of(
+        SBCustomerOrder order03 = SBCustomerOrder.of(
                 "IN0000003",
                 new Timestamp(new java.util.Date().getTime()),
                 3024.50
         );
 
-        SBCustomerOrder  order04 = SBCustomerOrder.of(
+        SBCustomerOrder order04 = SBCustomerOrder.of(
                 "IN0000004",
                 new Timestamp(new java.util.Date().getTime()),
                 5024.50
@@ -933,15 +999,14 @@ public class UnitTestHibernateSampleApp
         sbCustomer05.setRawUpdateStatus(1);
 
 
-
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer05);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer05.getCustomer05FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer05.getCustomer05FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -956,12 +1021,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Hibernate Lazy Loading in Default")
-    public void testHibernateDefaultLazyLoading(){
+    public void testHibernateDefaultLazyLoading()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -973,25 +1039,25 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder  order01 = SBCustomerOrder.of(
+        SBCustomerOrder order01 = SBCustomerOrder.of(
                 "IN0000001",
                 new Timestamp(new java.util.Date().getTime()),
                 2024.50
         );
 
-        SBCustomerOrder  order02 = SBCustomerOrder.of(
+        SBCustomerOrder order02 = SBCustomerOrder.of(
                 "IN0000002",
                 new Timestamp(new java.util.Date().getTime()),
                 1024.50
         );
 
-        SBCustomerOrder  order03 = SBCustomerOrder.of(
+        SBCustomerOrder order03 = SBCustomerOrder.of(
                 "IN0000003",
                 new Timestamp(new java.util.Date().getTime()),
                 3024.50
         );
 
-        SBCustomerOrder  order04 = SBCustomerOrder.of(
+        SBCustomerOrder order04 = SBCustomerOrder.of(
                 "IN0000004",
                 new Timestamp(new java.util.Date().getTime()),
                 5024.50
@@ -1026,15 +1092,14 @@ public class UnitTestHibernateSampleApp
         sbCustomer05.setRawUpdateStatus(1);
 
 
-
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer05);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer05.getCustomer05FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer05.getCustomer05FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1045,21 +1110,21 @@ public class UnitTestHibernateSampleApp
         //The first session has benn closed with end of try catch
         //*******************************************
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             SBCustomer05 customer = session.get(SBCustomer05.class, sbCustomer05.getCustomer05Id());
             transaction.commit();
-            System.out.println("Get Customer 05: "+ customer.getCustomer05FirstName());
+            System.out.println("Get Customer 05: " + customer.getCustomer05FirstName());
             System.out.println("Get Customer 05 Orders ");
             customer.getCustomer05Orders().forEach(
                     order ->
                     {
-                        System.out.println("Order Invoice Number :"+order.getCustomerOrderInvoiceNumber());
-                        System.out.println("\tDate & Time :"+order.getCustomerOrderDateTime());
-                        System.out.println("\tTotal Amount:"+order.getCustomerOrderTotal());
+                        System.out.println("Order Invoice Number :" + order.getCustomerOrderInvoiceNumber());
+                        System.out.println("\tDate & Time :" + order.getCustomerOrderDateTime());
+                        System.out.println("\tTotal Amount:" + order.getCustomerOrderTotal());
                     });
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1075,12 +1140,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Hibernate Lazy Loading in Default with Session Close")
-    public void testHibernateDefaultLazyLoadingWithSessionClose(){
+    public void testHibernateDefaultLazyLoadingWithSessionClose()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1092,25 +1158,25 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder  order01 = SBCustomerOrder.of(
+        SBCustomerOrder order01 = SBCustomerOrder.of(
                 "IN0000001",
                 new Timestamp(new java.util.Date().getTime()),
                 2024.50
         );
 
-        SBCustomerOrder  order02 = SBCustomerOrder.of(
+        SBCustomerOrder order02 = SBCustomerOrder.of(
                 "IN0000002",
                 new Timestamp(new java.util.Date().getTime()),
                 1024.50
         );
 
-        SBCustomerOrder  order03 = SBCustomerOrder.of(
+        SBCustomerOrder order03 = SBCustomerOrder.of(
                 "IN0000003",
                 new Timestamp(new java.util.Date().getTime()),
                 3024.50
         );
 
-        SBCustomerOrder  order04 = SBCustomerOrder.of(
+        SBCustomerOrder order04 = SBCustomerOrder.of(
                 "IN0000004",
                 new Timestamp(new java.util.Date().getTime()),
                 5024.50
@@ -1145,15 +1211,14 @@ public class UnitTestHibernateSampleApp
         sbCustomer05.setRawUpdateStatus(1);
 
 
-
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer05);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer05.getCustomer05FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer05.getCustomer05FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1166,26 +1231,26 @@ public class UnitTestHibernateSampleApp
 
         SBCustomer05 customer = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             customer = session.get(SBCustomer05.class, sbCustomer05.getCustomer05Id());
             transaction.commit();
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
 
-        System.out.println("Get Customer 05: "+ customer.getCustomer05FirstName());
+        System.out.println("Get Customer 05: " + customer.getCustomer05FirstName());
         System.out.println("Get Customer 05 Orders ");
         customer.getCustomer05Orders().forEach(
                 order ->
                 {
-                    System.out.println("Order Invoice Number :"+order.getCustomerOrderInvoiceNumber());
-                    System.out.println("\tDate & Time :"+order.getCustomerOrderDateTime());
-                    System.out.println("\tTotal Amount:"+order.getCustomerOrderTotal());
+                    System.out.println("Order Invoice Number :" + order.getCustomerOrderInvoiceNumber());
+                    System.out.println("\tDate & Time :" + order.getCustomerOrderDateTime());
+                    System.out.println("\tTotal Amount:" + order.getCustomerOrderTotal());
                 });
 
         long endTime = System.nanoTime();
@@ -1197,12 +1262,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Hibernate Eager Loading in Default with Session Close")
-    public void testHibernateEagerLoadingWithSessionClose(){
+    public void testHibernateEagerLoadingWithSessionClose()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1214,25 +1280,25 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder  order01 = SBCustomerOrder.of(
+        SBCustomerOrder order01 = SBCustomerOrder.of(
                 "IN0000001",
                 new Timestamp(new java.util.Date().getTime()),
                 2024.50
         );
 
-        SBCustomerOrder  order02 = SBCustomerOrder.of(
+        SBCustomerOrder order02 = SBCustomerOrder.of(
                 "IN0000002",
                 new Timestamp(new java.util.Date().getTime()),
                 1024.50
         );
 
-        SBCustomerOrder  order03 = SBCustomerOrder.of(
+        SBCustomerOrder order03 = SBCustomerOrder.of(
                 "IN0000003",
                 new Timestamp(new java.util.Date().getTime()),
                 3024.50
         );
 
-        SBCustomerOrder  order04 = SBCustomerOrder.of(
+        SBCustomerOrder order04 = SBCustomerOrder.of(
                 "IN0000004",
                 new Timestamp(new java.util.Date().getTime()),
                 5024.50
@@ -1267,15 +1333,14 @@ public class UnitTestHibernateSampleApp
         sbCustomer06.setRawUpdateStatus(1);
 
 
-
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer06);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer06.getCustomer06FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer06.getCustomer06FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1288,26 +1353,26 @@ public class UnitTestHibernateSampleApp
 
         SBCustomer06 customer = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             customer = session.get(SBCustomer06.class, sbCustomer06.getCustomer06Id());
             transaction.commit();
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
 
-        System.out.println("Get Customer 05: "+ customer.getCustomer06FirstName());
+        System.out.println("Get Customer 05: " + customer.getCustomer06FirstName());
         System.out.println("Get Customer 05 Orders ");
         customer.getCustomer06Orders().forEach(
                 order ->
                 {
-                    System.out.println("Order Invoice Number :"+order.getCustomerOrderInvoiceNumber());
-                    System.out.println("\tDate & Time :"+order.getCustomerOrderDateTime());
-                    System.out.println("\tTotal Amount:"+order.getCustomerOrderTotal());
+                    System.out.println("Order Invoice Number :" + order.getCustomerOrderInvoiceNumber());
+                    System.out.println("\tDate & Time :" + order.getCustomerOrderDateTime());
+                    System.out.println("\tTotal Amount:" + order.getCustomerOrderTotal());
                 });
 
         long endTime = System.nanoTime();
@@ -1319,12 +1384,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Supplier 02 and Address 01")
-    public void testHibernateSaveSupplier02AndAddress01(){
+    public void testHibernateSaveSupplier02AndAddress01()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1376,15 +1442,15 @@ public class UnitTestHibernateSampleApp
 
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbAddress01);
             session.save(sbSupplier02);
             transaction.commit();
-            System.out.println("Added Address 01: "+ sbAddress01.getAddress01Street());
-            System.out.println("Added Supplier 02: "+ sbSupplier02.getSupplier02BusinessName());
+            System.out.println("Added Address 01: " + sbAddress01.getAddress01Street());
+            System.out.println("Added Supplier 02: " + sbSupplier02.getSupplier02BusinessName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1399,12 +1465,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Supplier 03 and Address 02")
-    public void testHibernateSaveSupplier03AndAddress02(){
+    public void testHibernateSaveSupplier03AndAddress02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1456,15 +1523,15 @@ public class UnitTestHibernateSampleApp
 
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbAddress02);
             session.save(sbSupplier03);
             transaction.commit();
-            System.out.println("Added Address 01: "+ sbAddress02.getAddress02Street());
-            System.out.println("Added Supplier 02: "+ sbSupplier03.getSupplier03BusinessName());
+            System.out.println("Added Address 01: " + sbAddress02.getAddress02Street());
+            System.out.println("Added Supplier 02: " + sbSupplier03.getSupplier03BusinessName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1479,12 +1546,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 07 and SB Order 04")
-    public void testHibernateSaveCustomer07AndOrder04(){
+    public void testHibernateSaveCustomer07AndOrder04()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1496,7 +1564,7 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder04  order01 = new SBCustomerOrder04();
+        SBCustomerOrder04 order01 = new SBCustomerOrder04();
         order01.setCustomerOrder04InvoiceNumber("IN0000001");
         order01.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setCustomerOrder04Total(2024.50);
@@ -1508,7 +1576,7 @@ public class UnitTestHibernateSampleApp
         order01.setRawShowStatus(1);
         order01.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order02 = new SBCustomerOrder04();
+        SBCustomerOrder04 order02 = new SBCustomerOrder04();
         order02.setCustomerOrder04InvoiceNumber("IN0000002");
         order02.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
         order02.setCustomerOrder04Total(1024.50);
@@ -1520,7 +1588,7 @@ public class UnitTestHibernateSampleApp
         order02.setRawShowStatus(1);
         order02.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order03 = new SBCustomerOrder04();
+        SBCustomerOrder04 order03 = new SBCustomerOrder04();
         order03.setCustomerOrder04InvoiceNumber("IN0000003");
         order03.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
         order03.setCustomerOrder04Total(3024.50);
@@ -1532,7 +1600,7 @@ public class UnitTestHibernateSampleApp
         order03.setRawShowStatus(1);
         order03.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order04 = new SBCustomerOrder04();
+        SBCustomerOrder04 order04 = new SBCustomerOrder04();
         order04.setCustomerOrder04InvoiceNumber("IN0000004");
         order04.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
         order04.setCustomerOrder04Total(5024.50);
@@ -1573,17 +1641,17 @@ public class UnitTestHibernateSampleApp
         sbCustomer07.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer07);
             session.save(order01);
             session.save(order02);
             session.save(order03);
             session.save(order04);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer07.getCustomer07FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer07.getCustomer07FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1598,12 +1666,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 08 and SB Order 04")
-    public void testHibernateSaveCustomer08AndOrder04(){
+    public void testHibernateSaveCustomer08AndOrder04()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1615,7 +1684,7 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder04  order01 = new SBCustomerOrder04();
+        SBCustomerOrder04 order01 = new SBCustomerOrder04();
         order01.setCustomerOrder04InvoiceNumber("IN0000001");
         order01.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setCustomerOrder04Total(2024.50);
@@ -1627,7 +1696,7 @@ public class UnitTestHibernateSampleApp
         order01.setRawShowStatus(1);
         order01.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order02 = new SBCustomerOrder04();
+        SBCustomerOrder04 order02 = new SBCustomerOrder04();
         order02.setCustomerOrder04InvoiceNumber("IN0000002");
         order02.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
         order02.setCustomerOrder04Total(1024.50);
@@ -1639,7 +1708,7 @@ public class UnitTestHibernateSampleApp
         order02.setRawShowStatus(1);
         order02.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order03 = new SBCustomerOrder04();
+        SBCustomerOrder04 order03 = new SBCustomerOrder04();
         order03.setCustomerOrder04InvoiceNumber("IN0000003");
         order03.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
         order03.setCustomerOrder04Total(3024.50);
@@ -1651,7 +1720,7 @@ public class UnitTestHibernateSampleApp
         order03.setRawShowStatus(1);
         order03.setRawUpdateStatus(1);
 
-        SBCustomerOrder04  order04 = new SBCustomerOrder04();
+        SBCustomerOrder04 order04 = new SBCustomerOrder04();
         order04.setCustomerOrder04InvoiceNumber("IN0000004");
         order04.setCustomerOrder04DateTime(new Timestamp(new java.util.Date().getTime()));
         order04.setCustomerOrder04Total(5024.50);
@@ -1692,17 +1761,17 @@ public class UnitTestHibernateSampleApp
         sbCustomer08.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer08);
             session.save(order01);
             session.save(order02);
             session.save(order03);
             session.save(order04);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer08.getCustomer08FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer08.getCustomer08FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1717,12 +1786,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 09 and SB Order 05")
-    public void testHibernateSaveCustomer09AndOrder05(){
+    public void testHibernateSaveCustomer09AndOrder05()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1734,7 +1804,7 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder05  order01 = new SBCustomerOrder05();
+        SBCustomerOrder05 order01 = new SBCustomerOrder05();
         order01.setCustomerOrder05InvoiceNumber("IN0000001");
         order01.setCustomerOrder05DateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setCustomerOrder05Total(2024.50);
@@ -1746,7 +1816,7 @@ public class UnitTestHibernateSampleApp
         order01.setRawShowStatus(1);
         order01.setRawUpdateStatus(1);
 
-        SBCustomerOrder05  order02 = new SBCustomerOrder05();
+        SBCustomerOrder05 order02 = new SBCustomerOrder05();
         order02.setCustomerOrder05InvoiceNumber("IN0000002");
         order02.setCustomerOrder05DateTime(new Timestamp(new java.util.Date().getTime()));
         order02.setCustomerOrder05Total(1024.50);
@@ -1758,7 +1828,7 @@ public class UnitTestHibernateSampleApp
         order02.setRawShowStatus(1);
         order02.setRawUpdateStatus(1);
 
-        SBCustomerOrder05  order03 = new SBCustomerOrder05();
+        SBCustomerOrder05 order03 = new SBCustomerOrder05();
         order03.setCustomerOrder05InvoiceNumber("IN0000003");
         order03.setCustomerOrder05DateTime(new Timestamp(new java.util.Date().getTime()));
         order03.setCustomerOrder05Total(3024.50);
@@ -1770,7 +1840,7 @@ public class UnitTestHibernateSampleApp
         order03.setRawShowStatus(1);
         order03.setRawUpdateStatus(1);
 
-        SBCustomerOrder05  order04 = new SBCustomerOrder05();
+        SBCustomerOrder05 order04 = new SBCustomerOrder05();
         order04.setCustomerOrder05InvoiceNumber("IN0000004");
         order04.setCustomerOrder05DateTime(new Timestamp(new java.util.Date().getTime()));
         order04.setCustomerOrder05Total(5024.50);
@@ -1816,17 +1886,17 @@ public class UnitTestHibernateSampleApp
         order04.setSbCustomer09(sbCustomer09);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer09);
             session.save(order01);
             session.save(order02);
             session.save(order03);
             session.save(order04);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer09.getCustomer09FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer09.getCustomer09FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1841,12 +1911,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 10 and SB Order 06")
-    public void testHibernateSaveCustomer10AndOrder06(){
+    public void testHibernateSaveCustomer10AndOrder06()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -1858,7 +1929,7 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder06  order01 = new SBCustomerOrder06();
+        SBCustomerOrder06 order01 = new SBCustomerOrder06();
         order01.setCustomerOrder06InvoiceNumber("IN0000001");
         order01.setCustomerOrder06DateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setCustomerOrder06Total(2024.50);
@@ -1870,7 +1941,7 @@ public class UnitTestHibernateSampleApp
         order01.setRawShowStatus(1);
         order01.setRawUpdateStatus(1);
 
-        SBCustomerOrder06  order02 = new SBCustomerOrder06();
+        SBCustomerOrder06 order02 = new SBCustomerOrder06();
         order02.setCustomerOrder06InvoiceNumber("IN0000002");
         order02.setCustomerOrder06DateTime(new Timestamp(new java.util.Date().getTime()));
         order02.setCustomerOrder06Total(1024.50);
@@ -1882,7 +1953,7 @@ public class UnitTestHibernateSampleApp
         order02.setRawShowStatus(1);
         order02.setRawUpdateStatus(1);
 
-        SBCustomerOrder06  order03 = new SBCustomerOrder06();
+        SBCustomerOrder06 order03 = new SBCustomerOrder06();
         order03.setCustomerOrder06InvoiceNumber("IN0000003");
         order03.setCustomerOrder06DateTime(new Timestamp(new java.util.Date().getTime()));
         order03.setCustomerOrder06Total(3024.50);
@@ -1894,7 +1965,7 @@ public class UnitTestHibernateSampleApp
         order03.setRawShowStatus(1);
         order03.setRawUpdateStatus(1);
 
-        SBCustomerOrder06  order04 = new SBCustomerOrder06();
+        SBCustomerOrder06 order04 = new SBCustomerOrder06();
         order04.setCustomerOrder06InvoiceNumber("IN0000004");
         order04.setCustomerOrder06DateTime(new Timestamp(new java.util.Date().getTime()));
         order04.setCustomerOrder06Total(5024.50);
@@ -1940,17 +2011,17 @@ public class UnitTestHibernateSampleApp
         order04.setSbCustomer10(sbCustomer10);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer10);
             session.save(order01);
             session.save(order02);
             session.save(order03);
             session.save(order04);
             transaction.commit();
-            System.out.println("Added Customer 03: "+ sbCustomer10.getCustomer10FirstName());
+            System.out.println("Added Customer 03: " + sbCustomer10.getCustomer10FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -1965,12 +2036,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 11 and SB Order 07 and Item10")
-    public void testHibernateSaveCustomer11ndOrder07AndItem10(){
+    public void testHibernateSaveCustomer11ndOrder07AndItem10()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -2074,7 +2146,7 @@ public class UnitTestHibernateSampleApp
         item05.setRawShowStatus(1);
         item05.setRawUpdateStatus(1);
 
-        SBCustomerOrder07  order01 = new SBCustomerOrder07();
+        SBCustomerOrder07 order01 = new SBCustomerOrder07();
         order01.setCustomerOrder07InvoiceNumber("IN0000001");
         order01.setCustomerOrder07DateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setCustomerOrder07Total(2024.50);
@@ -2107,10 +2179,9 @@ public class UnitTestHibernateSampleApp
         item05.getItem10Orders().add(order01);
 
 
-
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer11);
             session.save(order01);
             session.save(item01);
@@ -2120,15 +2191,15 @@ public class UnitTestHibernateSampleApp
             session.save(item05);
 
             transaction.commit();
-            System.out.println("Added Customer 11: "+ sbCustomer11.getCustomer11FirstName());
-            System.out.println("Added Order 07: "+ order01.getCustomerOrder07InvoiceNumber());
-            System.out.println("Added Item 10 1: "+ item01.getItem10Name());
-            System.out.println("Added Item 10 2: "+ item02.getItem10Name());
-            System.out.println("Added Item 10 3: "+ item03.getItem10Name());
-            System.out.println("Added Item 10 4: "+ item04.getItem10Name());
-            System.out.println("Added Item 10 5: "+ item05.getItem10Name());
+            System.out.println("Added Customer 11: " + sbCustomer11.getCustomer11FirstName());
+            System.out.println("Added Order 07: " + order01.getCustomerOrder07InvoiceNumber());
+            System.out.println("Added Item 10 1: " + item01.getItem10Name());
+            System.out.println("Added Item 10 2: " + item02.getItem10Name());
+            System.out.println("Added Item 10 3: " + item03.getItem10Name());
+            System.out.println("Added Item 10 4: " + item04.getItem10Name());
+            System.out.println("Added Item 10 5: " + item05.getItem10Name());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2143,12 +2214,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 12 and SB Order 08 and Item11")
-    public void testHibernateSaveCustomer12ndOrder08AndItem11(){
+    public void testHibernateSaveCustomer12ndOrder08AndItem11()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -2252,7 +2324,7 @@ public class UnitTestHibernateSampleApp
         item05.setRawShowStatus(1);
         item05.setRawUpdateStatus(1);
 
-        SBCustomerOrder08  order01 = new SBCustomerOrder08();
+        SBCustomerOrder08 order01 = new SBCustomerOrder08();
         order01.setCustomerOrder08InvoiceNumber("IN0000001");
         order01.setCustomerOrder08DateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setCustomerOrder08Total(2024.50);
@@ -2285,10 +2357,9 @@ public class UnitTestHibernateSampleApp
         item05.getItem11Orders().add(order01);
 
 
-
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer12);
             session.save(order01);
             session.save(item01);
@@ -2298,15 +2369,15 @@ public class UnitTestHibernateSampleApp
             session.save(item05);
 
             transaction.commit();
-            System.out.println("Added Customer 11: "+ sbCustomer12.getCustomer12FirstName());
-            System.out.println("Added Order 07: "+ order01.getCustomerOrder08InvoiceNumber());
-            System.out.println("Added Item 10 1: "+ item01.getItem11Name());
-            System.out.println("Added Item 10 2: "+ item02.getItem11Name());
-            System.out.println("Added Item 10 3: "+ item03.getItem11Name());
-            System.out.println("Added Item 10 4: "+ item04.getItem11Name());
-            System.out.println("Added Item 10 5: "+ item05.getItem11Name());
+            System.out.println("Added Customer 11: " + sbCustomer12.getCustomer12FirstName());
+            System.out.println("Added Order 07: " + order01.getCustomerOrder08InvoiceNumber());
+            System.out.println("Added Item 10 1: " + item01.getItem11Name());
+            System.out.println("Added Item 10 2: " + item02.getItem11Name());
+            System.out.println("Added Item 10 3: " + item03.getItem11Name());
+            System.out.println("Added Item 10 4: " + item04.getItem11Name());
+            System.out.println("Added Item 10 5: " + item05.getItem11Name());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2321,12 +2392,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 13 and SB Order 09 Part 01")
-    public void testHibernateNotFoundCustomer13AndOrder09Part01(){
+    public void testHibernateNotFoundCustomer13AndOrder09Part01()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -2338,7 +2410,7 @@ public class UnitTestHibernateSampleApp
                 "292000"
         );
 
-        SBCustomerOrder09  order01 = new SBCustomerOrder09();
+        SBCustomerOrder09 order01 = new SBCustomerOrder09();
         order01.setCustomerOrder09InvoiceNumber("IN0000001");
         order01.setCustomerOrder09DateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setCustomerOrder09Total(2024.50);
@@ -2377,15 +2449,15 @@ public class UnitTestHibernateSampleApp
         order01.setSbCustomer13(sbCustomer13);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(sbCustomer13);
             session.save(order01);
             transaction.commit();
-            System.out.println("Added Customer Order 09: "+ order01.getCustomerOrder09InvoiceNumber());
-            System.out.println("Added Customer 13: "+ sbCustomer13.getCustomer13FirstName());
+            System.out.println("Added Customer Order 09: " + order01.getCustomerOrder09InvoiceNumber());
+            System.out.println("Added Customer 13: " + sbCustomer13.getCustomer13FirstName());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2402,7 +2474,8 @@ public class UnitTestHibernateSampleApp
                 accessProperties.setPropertyFromPath(
                         "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
                         "MORA.HIBERNATE.TEST.HibernateNotFoundCustomer13AndOrder09.SBCustomer13ID",
-                        utilities.getUUIDFromOrderedUUIDByteArrayWithApacheCommons(sbCustomer13.getCustomer13Id()).toString(),
+                        utilities.getUUIDFromOrderedUUIDByteArrayWithApacheCommons(sbCustomer13.getCustomer13Id())
+                                .toString(),
                         "Test Comment").intValue()
         );
 
@@ -2411,34 +2484,35 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     *
+     * <p>
      * Set hbm2ddl.auto > update
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 13 and SB Order 09 Part 02")
-    public void testHibernateNotFoundCustomer13AndOrder09Part02(){
+    public void testHibernateNotFoundCustomer13AndOrder09Part02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
         MoraAccessProperties accessProperties = new MoraAccessProperties();
         UuidUtilities utilities = new UuidUtilities();
 
-        byte [] customerOrder09Key = utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(
+        byte[] customerOrder09Key = utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(
                 UUID.fromString(accessProperties.getPropertyFromPath(
-                            "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
-                            "MORA.HIBERNATE.TEST.HibernateNotFoundCustomer13AndOrder09.SBCustomer13ID"))
+                        "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
+                        "MORA.HIBERNATE.TEST.HibernateNotFoundCustomer13AndOrder09.SBCustomer13ID"))
         );
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             SBCustomerOrder09 customerOrder09 = session.get(SBCustomerOrder09.class, customerOrder09Key);
             transaction.commit();
-            System.out.println("Get Customer Order 09: "+ customerOrder09.getCustomerOrder09InvoiceNumber());
+            System.out.println("Get Customer Order 09: " + customerOrder09.getCustomerOrder09InvoiceNumber());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2453,12 +2527,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Customer 14 and SB Order 10 and Item12")
-    public void testHibernateSaveCustomer14ndOrder10AndItem12(){
+    public void testHibernateSaveCustomer14ndOrder10AndItem12()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -2562,7 +2637,7 @@ public class UnitTestHibernateSampleApp
         item05.setRawShowStatus(1);
         item05.setRawUpdateStatus(1);
 
-        SBCustomerOrder10  order01 = new SBCustomerOrder10();
+        SBCustomerOrder10 order01 = new SBCustomerOrder10();
         order01.setCustomerOrder10InvoiceNumber("IN0000001");
         order01.setCustomerOrder10DateTime(new Timestamp(new java.util.Date().getTime()));
         order01.setCustomerOrder10Total(2024.50);
@@ -2595,10 +2670,9 @@ public class UnitTestHibernateSampleApp
         item05.getItem12Orders().add(order01);
 
 
-
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
 //            session.save(sbCustomer14);
 //            session.save(order01);
 //            session.save(item01);
@@ -2610,15 +2684,15 @@ public class UnitTestHibernateSampleApp
             session.persist(sbCustomer14);
 
             transaction.commit();
-            System.out.println("Added Customer 11: "+ sbCustomer14.getCustomer14FirstName());
-            System.out.println("Added Order 07: "+ order01.getCustomerOrder10InvoiceNumber());
-            System.out.println("Added Item 10 1: "+ item01.getItem12Name());
-            System.out.println("Added Item 10 2: "+ item02.getItem12Name());
-            System.out.println("Added Item 10 3: "+ item03.getItem12Name());
-            System.out.println("Added Item 10 4: "+ item04.getItem12Name());
-            System.out.println("Added Item 10 5: "+ item05.getItem12Name());
+            System.out.println("Added Customer 11: " + sbCustomer14.getCustomer14FirstName());
+            System.out.println("Added Order 07: " + order01.getCustomerOrder10InvoiceNumber());
+            System.out.println("Added Item 10 1: " + item01.getItem12Name());
+            System.out.println("Added Item 10 2: " + item02.getItem12Name());
+            System.out.println("Added Item 10 3: " + item03.getItem12Name());
+            System.out.println("Added Item 10 4: " + item04.getItem12Name());
+            System.out.println("Added Item 10 5: " + item05.getItem12Name());
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2633,12 +2707,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Payment 01 and SB Card Payment 01 and SB Cheque Payment 01 without Clone")
-    public void testHibernateSavePayment01CardPayment01ChequePayment01WithoutClone(){
+    public void testHibernateSavePayment01CardPayment01ChequePayment01WithoutClone()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -2687,19 +2762,19 @@ public class UnitTestHibernateSampleApp
         chequePayment01.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(payment01);
             session.save(cardPayment01);
             session.save(cardPayment01);
             session.save(chequePayment01);
             transaction.commit();
-            System.out.println("Added Payment: "+ payment01.getPayment01Number());
-            System.out.println("Added Card Payment: "+ cardPayment01.getPayment01Number());
-            System.out.println("Added Cheque Payment: "+ chequePayment01.getPayment01Number());
+            System.out.println("Added Payment: " + payment01.getPayment01Number());
+            System.out.println("Added Card Payment: " + cardPayment01.getPayment01Number());
+            System.out.println("Added Cheque Payment: " + chequePayment01.getPayment01Number());
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2714,12 +2789,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Payment 01 and SB Card Payment 01 and SB Cheque Payment 01 Cloned for Card Payment")
-    public void testHibernateSavePayment01CardPayment01ChequePayment01(){
+    public void testHibernateSavePayment01CardPayment01ChequePayment01()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -2770,19 +2846,19 @@ public class UnitTestHibernateSampleApp
         chequePayment01.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(payment01);
             session.save(cardPayment01);
             session.save(cardPayment01);
             session.save(chequePayment01);
             transaction.commit();
-            System.out.println("Added Payment: "+ payment01.getPayment01Number());
-            System.out.println("Added Card Payment: "+ cardPayment01.getPayment01Number());
-            System.out.println("Added Cheque Payment: "+ chequePayment01.getPayment01Number());
+            System.out.println("Added Payment: " + payment01.getPayment01Number());
+            System.out.println("Added Card Payment: " + cardPayment01.getPayment01Number());
+            System.out.println("Added Cheque Payment: " + chequePayment01.getPayment01Number());
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2797,12 +2873,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Payment 02 and SB Card Payment 02 and SB Cheque Payment 02")
-    public void testHibernateSavePayment02CardPayment02ChequePayment02(){
+    public void testHibernateSavePayment02CardPayment02ChequePayment02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -2851,18 +2928,18 @@ public class UnitTestHibernateSampleApp
         chequePayment.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(payment);
             session.save(cardPayment);
             session.save(chequePayment);
             transaction.commit();
-            System.out.println("Added Payment: "+ payment.getPayment02Number());
-            System.out.println("Added Card Payment: "+ cardPayment.getPayment02Number());
-            System.out.println("Added Cheque Payment: "+ chequePayment.getPayment02Number());
+            System.out.println("Added Payment: " + payment.getPayment02Number());
+            System.out.println("Added Card Payment: " + cardPayment.getPayment02Number());
+            System.out.println("Added Cheque Payment: " + chequePayment.getPayment02Number());
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2877,12 +2954,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Payment 03 and SB Card Payment 03 and SB Cheque Payment 03")
-    public void testHibernateSavePayment03CardPayment03ChequePayment03(){
+    public void testHibernateSavePayment03CardPayment03ChequePayment03()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -2931,18 +3009,18 @@ public class UnitTestHibernateSampleApp
         chequePayment.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(payment);
             session.save(cardPayment);
             session.save(chequePayment);
             transaction.commit();
-            System.out.println("Added Payment: "+ payment.getPayment03Number());
-            System.out.println("Added Card Payment: "+ cardPayment.getPayment03Number());
-            System.out.println("Added Cheque Payment: "+ chequePayment.getPayment03Number());
+            System.out.println("Added Payment: " + payment.getPayment03Number());
+            System.out.println("Added Card Payment: " + cardPayment.getPayment03Number());
+            System.out.println("Added Cheque Payment: " + chequePayment.getPayment03Number());
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -2957,12 +3035,13 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Insert SB Payment 04 and SB Card Payment 04 and SB Cheque Payment 04")
-    public void testHibernateSavePayment04CardPayment04ChequePayment04(){
+    public void testHibernateSavePayment04CardPayment04ChequePayment04()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -3011,18 +3090,18 @@ public class UnitTestHibernateSampleApp
         chequePayment.setRawUpdateStatus(1);
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             session.save(payment);
             session.save(cardPayment);
             session.save(chequePayment);
             transaction.commit();
-            System.out.println("Added Payment: "+ payment.getPayment04Number());
-            System.out.println("Added Card Payment: "+ cardPayment.getPayment04Number());
-            System.out.println("Added Cheque Payment: "+ chequePayment.getPayment04Number());
+            System.out.println("Added Payment: " + payment.getPayment04Number());
+            System.out.println("Added Card Payment: " + cardPayment.getPayment04Number());
+            System.out.println("Added Cheque Payment: " + chequePayment.getPayment04Number());
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -3037,24 +3116,25 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test CRUD Create with Address 02")
-    public void testCRUDCreateWithAddress02(){
+    public void testCRUDCreateWithAddress02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
         List<SBAddress02> address02s = new ArrayList<>();
 
-        for(int i=0; i<20; i++){
+        for (int i = 0; i < 20; i++) {
             SBAddress02 sbAddress02 = new SBAddress02();
-            sbAddress02.setAddress02Street("KusumaramaStreet"+i);
+            sbAddress02.setAddress02Street("KusumaramaStreet" + i);
             sbAddress02.setAddress02Village("Seenigama");
             sbAddress02.setAddress02City("Hikkaduwa");
             sbAddress02.setAddress02Country("Sri Lanka");
-            sbAddress02.setAddress02Zip("29200"+i);
+            sbAddress02.setAddress02Zip("29200" + i);
             sbAddress02.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
             sbAddress02.setRawLastUpdateLogId(1);
             sbAddress02.setUpdateUserAccountId(1);
@@ -3067,15 +3147,15 @@ public class UnitTestHibernateSampleApp
         }
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             address02s.forEach(address -> session.save(address));
             transaction.commit();
 
-            address02s.forEach(address -> System.out.println("Added Address : "+ address.getAddress02Street()));
+            address02s.forEach(address -> System.out.println("Added Address : " + address.getAddress02Street()));
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -3088,7 +3168,7 @@ public class UnitTestHibernateSampleApp
         address02s.forEach(address -> {
             accessProperties.setPropertyFromPath(
                     "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
-                    "MORA.HIBERNATE.TEST.testCRUDCreateWithAddress02."+address.getAddress02Street(),
+                    "MORA.HIBERNATE.TEST.testCRUDCreateWithAddress02." + address.getAddress02Street(),
                     utilities.getUUIDFromOrderedUUIDByteArrayWithApacheCommons(address.getAddress02Id()).toString(),
                     "Test Comment");
         });
@@ -3102,14 +3182,15 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     *
+     * <p>
      * set hdm2ddl.auto to update
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test CRUD Retrieve with Address 02")
-    public void testCRUDRetrieveWithAddress02(){
+    public void testCRUDRetrieveWithAddress02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -3118,22 +3199,23 @@ public class UnitTestHibernateSampleApp
 
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             address = session.get(
                     SBAddress02.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("d0fd6f3d-f870-414b-9f3e-5bb6a63071bf")));
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                            "d0fd6f3d-f870-414b-9f3e-5bb6a63071bf")));
             transaction.commit();
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
 
-        System.out.println("Address : "+ address.getAddress02Street());
+        System.out.println("Address : " + address.getAddress02Street());
 
         long endTime = System.nanoTime();
         ELAPSED_TIME = endTime - startTime;
@@ -3144,14 +3226,15 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     *
+     * <p>
      * set hdm2ddl.auto to update
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test CRUD Delete with Address 02")
-    public void testCRUDDeleteWithAddress02(){
+    public void testCRUDDeleteWithAddress02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -3160,20 +3243,21 @@ public class UnitTestHibernateSampleApp
 
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             address = session.get(
                     SBAddress02.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("d0fd6f3d-f870-414b-9f3e-5bb6a63071bf")));
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                            "d0fd6f3d-f870-414b-9f3e-5bb6a63071bf")));
 
-            System.out.println("Address : "+ address.getAddress02Street());
+            System.out.println("Address : " + address.getAddress02Street());
 
             session.delete(address);
 
             transaction.commit();
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -3189,14 +3273,15 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     *
+     * <p>
      * set hdm2ddl.auto to update
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test CRUD Update with Address 02")
-    public void testCRUDUpdateWithAddress02(){
+    public void testCRUDUpdateWithAddress02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -3205,25 +3290,27 @@ public class UnitTestHibernateSampleApp
 
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
             address = session.get(
                     SBAddress02.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
-            System.out.println("Address : "+ address.getAddress02Street());
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                            "57487766-df14-4876-9edd-c261282c6661")));
+            System.out.println("Address : " + address.getAddress02Street());
             address.setAddress02Street("KusumaramaStreet5");
 
             session.update(address);
 
             address = session.get(
                     SBAddress02.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
-            System.out.println("Address : "+ address.getAddress02Street());
+                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                            "57487766-df14-4876-9edd-c261282c6661")));
+            System.out.println("Address : " + address.getAddress02Street());
 
             transaction.commit();
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -3239,14 +3326,15 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     *
+     * <p>
      * set hdm2ddl.auto to update
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Persistent Object with Address 02")
-    public void testPersistentObjectWithAddress02(){
+    public void testPersistentObjectWithAddress02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -3254,45 +3342,52 @@ public class UnitTestHibernateSampleApp
 
         SBAddress02 address1 = null;
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            address1 = session.get(
-                    SBAddress02.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
-            System.out.println("Address t1-1: "+ address1.getAddress02Street());
-            address1.setAddress02Street("KusumaramaStreet1000");
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+                address1 = session.get(
+                        SBAddress02.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "57487766-df14-4876-9edd-c261282c6661")));
+                System.out.println("Address t1-1: " + address1.getAddress02Street());
+                address1.setAddress02Street("KusumaramaStreet1000");
 
-            SBAddress02 address2 = session.get(
-                    SBAddress02.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
-            System.out.println("Address t2-1: "+ address1.getAddress02Street());
-            System.out.println("Address t2-2: "+ address2.getAddress02Street());
+                SBAddress02 address2 = session.get(
+                        SBAddress02.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "57487766-df14-4876-9edd-c261282c6661")));
+                System.out.println("Address t2-1: " + address1.getAddress02Street());
+                System.out.println("Address t2-2: " + address2.getAddress02Street());
 
-            address2.setAddress02Street("KusumaramaStreet3000");
-            System.out.println("Address t3-1: "+ address1.getAddress02Street());
-            System.out.println("Address t3-2: "+ address2.getAddress02Street());
+                address2.setAddress02Street("KusumaramaStreet3000");
+                System.out.println("Address t3-1: " + address1.getAddress02Street());
+                System.out.println("Address t3-2: " + address2.getAddress02Street());
 
 
-//            session.update(address);
-//
-//            address = session.get(
-//                    SBAddress02.class,
-//                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
-//            System.out.println("Address : "+ address.getAddress02Street());
+                //            session.update(address);
+                //
+                //            address = session.get(
+                //                    SBAddress02.class,
+                //                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("57487766-df14-4876-9edd-c261282c6661")));
+                //            System.out.println("Address : "+ address.getAddress02Street());
 
-            transaction.commit();
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
-            }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
 
         address1.setAddress02Street("KusumaramaStreet5000");
-        System.out.println("Address t4-1: "+ address1.getAddress02Street());
+        System.out.println("Address t4-1: " + address1.getAddress02Street());
 
         long endTime = System.nanoTime();
         ELAPSED_TIME = endTime - startTime;
@@ -3303,14 +3398,15 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     *
+     * <p>
      * set hdm2ddl.auto to update
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Persistent Object in Delete Operation with Address 02")
-    public void testPersistentObjectInDeleteWithAddress02(){
+    public void testPersistentObjectInDeleteWithAddress02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -3318,33 +3414,40 @@ public class UnitTestHibernateSampleApp
 
         SBAddress02 address1 = null;
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            address1 = session.get(
-                    SBAddress02.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("be4d4cb2-4ca5-4c1a-97f9-cd87941a9e1f")));
-            System.out.println("Address t1-1: "+ address1.getAddress02Street());
-            address1.setAddress02Street("KusumaramaStreet2000");
 
-            session.delete(address1);
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+                address1 = session.get(
+                        SBAddress02.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "be4d4cb2-4ca5-4c1a-97f9-cd87941a9e1f")));
+                System.out.println("Address t1-1: " + address1.getAddress02Street());
+                address1.setAddress02Street("KusumaramaStreet2000");
 
-            address1.setAddress02Street("KusumaramaStreet3000");
+                session.delete(address1);
 
-            session.save(address1);
+                address1.setAddress02Street("KusumaramaStreet3000");
 
-            transaction.commit();
+                session.save(address1);
+
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
-            }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
 
         address1.setAddress02Street("KusumaramaStreet6000");
-        System.out.println("Address t4-1: "+ address1.getAddress02Street());
+        System.out.println("Address t4-1: " + address1.getAddress02Street());
 
         long endTime = System.nanoTime();
         ELAPSED_TIME = endTime - startTime;
@@ -3355,14 +3458,15 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     *
+     * <p>
      * set hdm2ddl.auto to update
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Detached Object to Persistent Operation with Address 02")
-    public void testDetachedToPersistentWithAddress02(){
+    public void testDetachedToPersistentWithAddress02()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -3371,41 +3475,52 @@ public class UnitTestHibernateSampleApp
         SBAddress02 address1 = null;
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            address1 = session.get(
-                    SBAddress02.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("c7cda60a-670c-429f-b60d-7fc74c99cf42")));
-            System.out.println("Address t1-1: "+ address1.getAddress02Street());
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try {
+                transaction = session.beginTransaction();
+                address1 = session.get(
+                        SBAddress02.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "c7cda60a-670c-429f-b60d-7fc74c99cf42")));
+                System.out.println("Address t1-1: " + address1.getAddress02Street());
 
-            transaction.commit();
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
-            }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
 
 //        address1.setAddress02Street("KusumaramaStreet6000");
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            session.update(address1);
-//            address1.setAddress02Street("KusumaramaStreet8000");
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try {
+                transaction = session.beginTransaction();
+                session.update(address1);
+                //            address1.setAddress02Street("KusumaramaStreet8000");
 
-            transaction.commit();
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
-            }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
 
-        System.out.println("Address t2-1: "+ address1.getAddress02Street());
+        System.out.println("Address t2-1: " + address1.getAddress02Street());
 
         long endTime = System.nanoTime();
         ELAPSED_TIME = endTime - startTime;
@@ -3416,24 +3531,25 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test CRUD Create with Address 03")
-    public void testCRUDCreateWithAddress03(){
+    public void testCRUDCreateWithAddress03()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
         List<SBAddress03> address03s = new ArrayList<>();
 
-        for(int i=0; i<20; i++){
+        for (int i = 0; i < 20; i++) {
             SBAddress03 sbAddress03 = new SBAddress03();
-            sbAddress03.setAddress03Street("KusumaramaStreet"+i);
+            sbAddress03.setAddress03Street("KusumaramaStreet" + i);
             sbAddress03.setAddress03Village("Seenigama");
             sbAddress03.setAddress03City("Hikkaduwa");
             sbAddress03.setAddress03Country("Sri Lanka");
-            sbAddress03.setAddress03Zip("29200"+i);
+            sbAddress03.setAddress03Zip("29200" + i);
             sbAddress03.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
             sbAddress03.setRawLastUpdateLogId(1);
             sbAddress03.setUpdateUserAccountId(1);
@@ -3445,18 +3561,24 @@ public class UnitTestHibernateSampleApp
             address03s.add(sbAddress03);
         }
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            address03s.forEach(address -> session.save(address));
-            transaction.commit();
 
-            address03s.forEach(address -> System.out.println("Added Address : "+ address.getAddress03Street()));
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+                address03s.forEach(address -> session.save(address));
+                transaction.commit();
+
+                address03s.forEach(address -> System.out.println("Added Address : " + address.getAddress03Street()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
 
         } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
-            }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
@@ -3467,7 +3589,7 @@ public class UnitTestHibernateSampleApp
         address03s.forEach(address -> {
             accessProperties.setPropertyFromPath(
                     "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
-                    "MORA.HIBERNATE.TEST.testCRUDCreateWithAddress03."+address.getAddress03Street(),
+                    "MORA.HIBERNATE.TEST.testCRUDCreateWithAddress03." + address.getAddress03Street(),
                     utilities.getUUIDFromOrderedUUIDByteArrayWithApacheCommons(address.getAddress03Id()).toString(),
                     "Test Comment");
         });
@@ -3481,14 +3603,15 @@ public class UnitTestHibernateSampleApp
     /**
      * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
      * This compare for expected TEST_OUT_PUT_STRING
-     *
+     * <p>
      * set hdm2ddl.auto to update
-     * */
+     */
     @Test
     @Tag("CREATE")
     @Tag("RESOURCE")
     @DisplayName("Test Detached Object to Persistent Operation with Select Before Update with Address 03")
-    public void testDetachedToPersistentWithSelectBeforeUpdateWithAddress03(){
+    public void testDetachedToPersistentWithSelectBeforeUpdateWithAddress03()
+    {
         System.out.println("Programme Start");
         long startTime = System.nanoTime();
 
@@ -3497,17 +3620,25 @@ public class UnitTestHibernateSampleApp
         SBAddress03 address1 = null;
 
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            address1 = session.get(
-                    SBAddress03.class,
-                    utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString("e9c79954-9a5e-4903-ac5f-8e3268b14544")));
-            System.out.println("Address t1-1: "+ address1.getAddress03Street());
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try {
+                transaction = session.beginTransaction();
+                address1 = session.get(
+                        SBAddress03.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "e9c79954-9a5e-4903-ac5f-8e3268b14544")));
+                System.out.println("Address t1-1: " + address1.getAddress03Street());
 
-            transaction.commit();
-
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
         } catch (Throwable throwable) {
-            if(transaction !=null){
+            if (transaction != null) {
                 transaction.rollback();
             }
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
@@ -3516,21 +3647,25 @@ public class UnitTestHibernateSampleApp
 
 //        address1.setAddress02Street("KusumaramaStreet6000");
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession();){
-            transaction=session.beginTransaction();
-            session.update(address1);
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try {
+                transaction = session.beginTransaction();
+                session.update(address1);
 
-            transaction.commit();
-
-        } catch (Throwable throwable) {
-            if(transaction !=null){
-                transaction.rollback();
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
             }
+        } catch (Throwable throwable) {
             LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
             throwable.printStackTrace();
         }
 
-        System.out.println("Address t2-1: "+ address1.getAddress03Street());
+        System.out.println("Address t2-1: " + address1.getAddress03Street());
 
         long endTime = System.nanoTime();
         ELAPSED_TIME = endTime - startTime;
@@ -3538,4 +3673,865 @@ public class UnitTestHibernateSampleApp
 
     }
 
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query with Address 02")
+    public void testHQLQueryWithAddress02()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List address = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                Query query = session.createQuery("from SBAddress02");
+                address = query.list();
+
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + address.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query for Where with Address 02")
+    public void testHQLQueryForWhereWithAddress02()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress02> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                Query query = session.createQuery("from SBAddress02 where address02Zip like '%1%'");
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(address -> System.out.println("Added Address : " + address.getAddress02Street()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query for Pagination with Address 02")
+    public void testHQLQueryForPaginationWithAddress02()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress02> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                Query query = session.createQuery("from SBAddress02 order by address02Street asc");
+                query.setFirstResult(5);
+                query.setMaxResults(10);
+
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(address -> System.out.println("Added Address : " + address.getAddress02Street()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query for Single Select and Pagination with Address 02")
+    public void testHQLQueryForSingleSelectAndPaginationWithAddress02()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                Query query = session.createQuery("select address02Street from SBAddress02 order by address02Street asc");
+                query.setFirstResult(5);
+                query.setMaxResults(10);
+
+                List<String> addressStreets = query.list();
+
+                transaction.commit();
+
+                addressStreets.forEach(System.out::println);
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query for Multiple Select and Pagination with Address 02")
+    public void testHQLQueryForMultipleSelectAndPaginationWithAddress02()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                Query query = session.createQuery(
+                        "select address02Street, address02Zip from SBAddress02 order by address02Street asc");
+                query.setFirstResult(5);
+                query.setMaxResults(10);
+
+                List<Object[]> addressDetails = query.list();
+
+                transaction.commit();
+
+                addressDetails.forEach(address -> System.out.println("Added Address : " + address[0]));
+
+                System.out.println(addressDetails.size());
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query for Multiple Select for Map and Pagination with Address 02")
+    public void testHQLQueryForMultipleSelectForMapAndPaginationWithAddress02()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                Query query = session.createQuery(
+                        "select new Map(address02Zip, address02Street) from SBAddress02 order by address02Street asc");
+                query.setFirstResult(5);
+                query.setMaxResults(10);
+
+                List<Map<String, String>> addressDetails = query.list();
+
+                transaction.commit();
+
+                System.out.println(addressDetails.size());
+
+                String street = addressDetails
+                        .stream()
+                        .filter(address -> address.containsKey("1"))
+                        .findFirst()
+                        .get()
+                        .get("1");
+
+                System.out.println("First Street : " + street);
+
+                List<String> streets = addressDetails
+                        .stream()
+                        .map(address -> address.get("1"))
+                        .collect(Collectors.toList());
+
+                streets.forEach(System.out::println);
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query with Parameter Binding with Address 02")
+    public void testHQLQueryWithParameterBindingWithAddress02()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+        List<SBAddress02> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+//            Query query = session.createQuery("from SBAddress02 where address02Zip = '292000' or address02Zip = '2920013'");
+//                Query query = session.createQuery("from SBAddress02 where address02Zip = ? or address02Zip = ?"); // No longer support
+                Query query = session.createQuery("from SBAddress02 where address02Zip = ?1 or address02Zip = :searchParam");
+//                    .setParameter(1,"292000")
+//                    .setParameter("searchParam","2920013");
+                query.setParameter(1, "292000");
+                query.setParameter("searchParam", "2920013");
+
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(address -> System.out.println("Added Address : " + address.getAddress02Street()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test CRUD Create with Address 04")
+    public void testCRUDCreateWithAddress04()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress04> address04s = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            SBAddress04 sbAddress04 = new SBAddress04();
+            sbAddress04.setAddress04Street("KusumaramaStreet" + i);
+            sbAddress04.setAddress04Village("Seenigama");
+            sbAddress04.setAddress04City("Hikkaduwa");
+            sbAddress04.setAddress04Country("Sri Lanka");
+            sbAddress04.setAddress04Zip("29200" + i);
+            sbAddress04.setRawLastUpdateDateTime(new Timestamp(new java.util.Date().getTime()));
+            sbAddress04.setRawLastUpdateLogId(1);
+            sbAddress04.setUpdateUserAccountId(1);
+            sbAddress04.setRawActiveStatus(1);
+            sbAddress04.setRawDeleteStatus(1);
+            sbAddress04.setRawShowStatus(1);
+            sbAddress04.setRawUpdateStatus(1);
+
+            address04s.add(sbAddress04);
+        }
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            transaction = session.beginTransaction();
+            address04s.forEach(address -> session.save(address));
+            transaction.commit();
+
+            address04s.forEach(address -> System.out.println("Added Address : " + address.getAddress04Street()));
+
+        } catch (Throwable throwable) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        MoraAccessProperties accessProperties = new MoraAccessProperties();
+        UuidUtilities utilities = new UuidUtilities();
+
+        address04s.forEach(address -> {
+            accessProperties.setPropertyFromPath(
+                    "D:\\SLMORAWorkSpace\\IntelliJProjects\\MoraHibernateLearn004\\src\\main\\resources\\hibernatetestsupport.properties",
+                    "MORA.HIBERNATE.TEST.testCRUDCreateWithAddress04." + address.getAddress04Street(),
+                    utilities.getUUIDFromOrderedUUIDByteArrayWithApacheCommons(address.getAddress04Id()).toString(),
+                    "Test Comment");
+        });
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query with Named Query with Address 04")
+    public void testHQLQueryWithNamedQueryWithAddress04()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress04> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                Query query = session.getNamedQuery("SBAddress04.getFromZip")
+                    .setParameter(1,"292000");
+
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(address -> System.out.println("Added Address : " + address.getAddress04Street()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query with Named Native Query with Address 04")
+    public void testHQLQueryWithNamedNativeQueryWithAddress04()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress04> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                Query query = session.getNamedNativeQuery("SBAddress04.getFromStreetNative")
+                        .setParameter(1,"KusumaramaStreet10");
+
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(address -> System.out.println("Added Address : " + address.getAddress04Zip()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query with Criteria Query with Address 04")
+    public void testHQLQueryWithCriteriaQueryWithAddress04()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress04> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<SBAddress04> criteriaQuery = criteriaBuilder.createQuery(SBAddress04.class);
+                Root<SBAddress04> root = criteriaQuery.from(SBAddress04.class);
+                criteriaQuery.select(root);
+
+                Query query = session.createQuery(criteriaQuery);
+
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(address -> System.out.println("Added Address : " + address.getAddress04Zip()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query with Criteria Query for where with Address 04")
+    public void testHQLQueryWithCriteriaQueryForWhereWithAddress04()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress04> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<SBAddress04> criteriaQuery = criteriaBuilder.createQuery(SBAddress04.class);
+                Root<SBAddress04> root = criteriaQuery.from(SBAddress04.class);
+
+                criteriaQuery.select(root)
+                        .where(criteriaBuilder.equal(root.get("address04Zip"),"292000"))
+                        .orderBy(criteriaBuilder.asc(root.get("address04Street")));
+
+                Query query = session.createQuery(criteriaQuery);
+
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(address -> System.out.println("Added Address : " + address.getAddress04Street()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test HQL Query with Criteria Query for Multiple where with Address 04")
+    public void testHQLQueryWithCriteriaQueryForMultipleWhereWithAddress04()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<SBAddress04> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<SBAddress04> criteriaQuery = criteriaBuilder.createQuery(SBAddress04.class);
+                Root<SBAddress04> root = criteriaQuery.from(SBAddress04.class);
+
+//                criteriaQuery.select(root)
+//                        .where(criteriaBuilder.equal(root.get("address04Zip"),"292000"))
+//                        .where(criteriaBuilder.like(root.get("address04City"),"Hikkaduwa"));
+
+                Predicate[] predicates = new Predicate[2];
+                predicates[0] = criteriaBuilder.equal(root.get("address04Zip"),"292000");
+                predicates[1] = criteriaBuilder.like(root.get("address04City"),"Hikkaduwa");
+
+                //AND
+//                criteriaQuery.select(root)
+//                        .where(predicates);
+
+                //OR
+//                criteriaQuery.select(root)
+//                        .where(criteriaBuilder.or(predicates[0],predicates[1]));
+
+                //AND
+                criteriaQuery.select(root)
+                        .where(criteriaBuilder.and(predicates[0],predicates[1]));
+
+                Query query = session.createQuery(criteriaQuery);
+
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(address -> System.out.println("Added Address : " + address.getAddress04Street()));
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test Criteria Query with Projection with Address 04")
+    public void testCriteriaQueryWithProjectionWithAddress04()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        List<Long> addresses = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+                Root<SBAddress04> root = criteriaQuery.from(SBAddress04.class);
+
+                criteriaQuery.select(criteriaBuilder.count(root));
+
+                Query query = session.createQuery(criteriaQuery);
+
+                addresses = query.list();
+
+                transaction.commit();
+
+                addresses.forEach(System.out::println);
+
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address : " + addresses.size());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+
+    }
+
+    /**
+     * This method runs getPropertyFromResource(String propertyFileName, String propertyRef) methods in MoraAccessProperties class
+     * This compare for expected TEST_OUT_PUT_STRING
+     * <p>
+     * to add data to table get execute testCRUDCreateWithAddress02
+     */
+    @Test
+    @Tag("CREATE")
+    @Tag("RESOURCE")
+    @DisplayName("Test First Level Cache Address 04")
+    public void testFirstLevelCacheWithAddress04()
+    {
+        System.out.println("Programme Start");
+        long startTime = System.nanoTime();
+
+        UuidUtilities utilities = new UuidUtilities();
+        SBAddress04 address1 = null;
+
+        SBAddress04 address2 = null;
+
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try{
+                System.out.println("Session Start");
+                transaction = session.beginTransaction();
+                address1 = session.get(
+                        SBAddress04.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "a5a4e8af-6564-4742-8efb-85e89e623bc4")));
+
+                address2 = session.get(
+                        SBAddress04.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "a5a4e8af-6564-4742-8efb-85e89e623bc4")));
+                transaction.commit();
+                System.out.println("Session Closed");
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address 1 : " + address1.getAddress04Street());
+        System.out.println("Address 2 : " + address2.getAddress04Street());
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession();) {
+            try{
+                System.out.println("Session Start");
+                transaction = session.beginTransaction();
+                address1 = session.get(
+                        SBAddress04.class,
+                        utilities.getOrderedUUIDByteArrayFromUUIDWithApacheCommons(UUID.fromString(
+                                "a5a4e8af-6564-4742-8efb-85e89e623bc4")));
+                transaction.commit();
+                System.out.println("Session Closed");
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                LOGGER.error(ExceptionUtils.getFullStackTrace(e));
+                e.printStackTrace();
+            }
+
+        } catch (Throwable throwable) {
+            LOGGER.error(ExceptionUtils.getFullStackTrace(throwable));
+            throwable.printStackTrace();
+        }
+
+        System.out.println("Address 1 : " + address1.getAddress04Street());
+
+        long endTime = System.nanoTime();
+        ELAPSED_TIME = endTime - startTime;
+        System.out.println("Programme End");
+    }
 }

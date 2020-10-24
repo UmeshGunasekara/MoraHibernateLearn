@@ -121,6 +121,7 @@
         <mapping class="com.slmora.learn.entity.hibernate.SBCardPayment04" />
         <mapping class="com.slmora.learn.entity.hibernate.SBChequePayment04" />
         <mapping class="com.slmora.learn.entity.hibernate.SBAddress03" />
+        <mapping class="com.slmora.learn.entity.hibernate.SBAddress04" />
         <!--https://dzone.com/articles/hibernate-5-xml-configuration-example-->
     </session-factory>
 </hibernate-configuration>
